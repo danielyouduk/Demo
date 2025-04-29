@@ -1,20 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace DriverService.Api.Controllers;
+namespace VehicleService.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class DriversController : ControllerBase
+public class VehiclesController : ControllerBase
 {
     [HttpGet]
     public IEnumerable<string> Get()
     {
-        return ["David", "John"];
+        return ["Scania", "Volvo"];
     }
     
     [HttpGet("{id:guid}")]
     public string Get(Guid id)
     {
-        return "David";
+        return "Scania";
     }
 }
