@@ -24,4 +24,10 @@ public class DriversController : ControllerBase
     {
         return CreatedAtAction(nameof(Get), new { id = Guid.NewGuid() }, command);
     }
+
+    [HttpPut("{id:guid}")]
+    public ActionResult Put(Guid id, [FromBody] UpdateDriverCommand command)
+    {
+        return Ok();
+    }
 }
