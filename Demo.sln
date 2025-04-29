@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleService.Api", "src\S
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6CF03E11-3BA0-4BB5-A893-83A84F085C45}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DriverService.Application", "src\Services\DriverService\Core\DriverService.Application\DriverService.Application.csproj", "{47D157DB-D507-44D4-8C45-43236B942FF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,7 @@ Global
 		{7486C0C9-896A-4961-87F9-0064152655B8} = {4EAA475E-DA25-41B1-A206-F3343963CAA0}
 		{ECF4DDD3-C6D1-4C8D-A8C7-E15F3736D2EC} = {4EAA475E-DA25-41B1-A206-F3343963CAA0}
 		{5F1CC649-BB4A-40D8-B2C1-EB9E147ADB6F} = {953E1129-417F-4959-8C29-8E4CEDA70C07}
+		{47D157DB-D507-44D4-8C45-43236B942FF2} = {467FEC06-0408-4606-897D-B87A6362F7A5}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7467D75F-1F53-4180-8614-F42E3B135D3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -53,5 +56,9 @@ Global
 		{5F1CC649-BB4A-40D8-B2C1-EB9E147ADB6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F1CC649-BB4A-40D8-B2C1-EB9E147ADB6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F1CC649-BB4A-40D8-B2C1-EB9E147ADB6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47D157DB-D507-44D4-8C45-43236B942FF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47D157DB-D507-44D4-8C45-43236B942FF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47D157DB-D507-44D4-8C45-43236B942FF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47D157DB-D507-44D4-8C45-43236B942FF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

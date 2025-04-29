@@ -6,4 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\DriverService.Application\DriverService.Application.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -17,4 +17,10 @@ public class VehiclesController : ControllerBase
     {
         return "Scania";
     }
+    
+    [HttpPost]
+    public ActionResult Post([FromBody] string value)
+    {
+        return CreatedAtAction(nameof(Get), new { id = Guid.NewGuid() }, value);
+    }
 }
