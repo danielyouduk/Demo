@@ -7,7 +7,6 @@ namespace DriverService.Persistence.Configurations;
 
 public class DriverConfiguration : BaseConfiguration<DriverEntity>
 {
-    private const string TableSchema = "dbo";
     private const string TableName = "Driver";
     
     public override void Configure(EntityTypeBuilder<DriverEntity> builder)
@@ -22,7 +21,7 @@ public class DriverConfiguration : BaseConfiguration<DriverEntity>
 
     private static void ConfigureTable(EntityTypeBuilder<DriverEntity> builder)
     {
-        builder.ToTable(TableName, TableSchema);
+        builder.ToTable(TableName);
     }
     
     private static void ConfigureProperties(EntityTypeBuilder<DriverEntity> builder)
@@ -42,15 +41,22 @@ public class DriverConfiguration : BaseConfiguration<DriverEntity>
         builder.HasData(
             new DriverEntity
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("63e1389a-571c-491e-9c60-bb98c838d0e2"),
                 Name = "David",
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             },
             new DriverEntity
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("81f31f9a-0955-49b5-b529-3c37c117fa03"),
                 Name = "John",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            },
+            new DriverEntity
+            {
+                Id = new Guid("df62c086-9697-465b-aa48-c4d35e14b477"),
+                Name = "Jane",
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             });
