@@ -1,5 +1,3 @@
-
-
 using DriverService.Persistence.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);

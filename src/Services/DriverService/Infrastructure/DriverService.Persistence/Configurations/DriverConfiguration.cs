@@ -26,7 +26,7 @@ public class DriverConfiguration : BaseConfiguration<DriverEntity>
     
     private static void ConfigureProperties(EntityTypeBuilder<DriverEntity> builder)
     {
-        builder.Property(entity => entity.Name)
+        builder.Property(entity => entity.FirstName)
             .IsRequired()
             .HasMaxLength(100);
     }
@@ -42,21 +42,24 @@ public class DriverConfiguration : BaseConfiguration<DriverEntity>
             new DriverEntity
             {
                 Id = new Guid("63e1389a-571c-491e-9c60-bb98c838d0e2"),
-                Name = "David",
+                FirstName = "David",
+                LastName = "Smith",
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             },
             new DriverEntity
             {
                 Id = new Guid("81f31f9a-0955-49b5-b529-3c37c117fa03"),
-                Name = "John",
+                FirstName = "John",
+                LastName = "Davis",
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             },
             new DriverEntity
             {
                 Id = new Guid("df62c086-9697-465b-aa48-c4d35e14b477"),
-                Name = "Jane",
+                FirstName = "Jane",
+                LastName = "Kendal",
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             });
