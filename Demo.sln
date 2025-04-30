@@ -28,6 +28,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6CF03E11
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DriverService.Application", "src\Services\DriverService\Core\DriverService.Application\DriverService.Application.csproj", "{47D157DB-D507-44D4-8C45-43236B942FF2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DriverService.Persistence", "src\Services\DriverService\Infrastructure\DriverService.Persistence\DriverService.Persistence.csproj", "{063B4945-3071-4707-83D3-5B5DC32A1653}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DriverService.Domain", "src\Services\DriverService\Core\DriverService.Domain\DriverService.Domain.csproj", "{2DC26140-4267-4AB3-9561-5B2736EFA749}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +50,8 @@ Global
 		{ECF4DDD3-C6D1-4C8D-A8C7-E15F3736D2EC} = {4EAA475E-DA25-41B1-A206-F3343963CAA0}
 		{5F1CC649-BB4A-40D8-B2C1-EB9E147ADB6F} = {953E1129-417F-4959-8C29-8E4CEDA70C07}
 		{47D157DB-D507-44D4-8C45-43236B942FF2} = {467FEC06-0408-4606-897D-B87A6362F7A5}
+		{063B4945-3071-4707-83D3-5B5DC32A1653} = {55DE5DB9-38FE-4BC2-B375-4FB4B3492034}
+		{2DC26140-4267-4AB3-9561-5B2736EFA749} = {467FEC06-0408-4606-897D-B87A6362F7A5}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7467D75F-1F53-4180-8614-F42E3B135D3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -60,5 +66,13 @@ Global
 		{47D157DB-D507-44D4-8C45-43236B942FF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47D157DB-D507-44D4-8C45-43236B942FF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47D157DB-D507-44D4-8C45-43236B942FF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{063B4945-3071-4707-83D3-5B5DC32A1653}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{063B4945-3071-4707-83D3-5B5DC32A1653}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{063B4945-3071-4707-83D3-5B5DC32A1653}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{063B4945-3071-4707-83D3-5B5DC32A1653}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DC26140-4267-4AB3-9561-5B2736EFA749}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DC26140-4267-4AB3-9561-5B2736EFA749}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DC26140-4267-4AB3-9561-5B2736EFA749}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DC26140-4267-4AB3-9561-5B2736EFA749}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
