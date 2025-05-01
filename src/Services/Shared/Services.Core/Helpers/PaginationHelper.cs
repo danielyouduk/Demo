@@ -12,14 +12,4 @@ public static class PaginationHelper
             .Skip((pageNumber - 1) * paginationParameters.PageSize)
             .Take(paginationParameters.PageSize);
     }
-    
-    public static PagedRequestQuery ToPagedRequest(this PagedRequestQuery parameters) =>
-        new()
-        {
-            PageNumber = parameters.PageNumber,
-            PageSize = parameters.PageSize,
-            SortBy = parameters.SortBy,
-            SortDescending = parameters.SortDescending,
-            IsActive = parameters.IsActive
-        };
 }
