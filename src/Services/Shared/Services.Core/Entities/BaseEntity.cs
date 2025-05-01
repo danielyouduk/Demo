@@ -1,4 +1,4 @@
-namespace DriverService.Domain.Entities.Common;
+namespace Services.Core.Entities;
 
 public abstract class BaseEntity
 {

@@ -1,6 +1,6 @@
-using DriverService.Domain.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Services.Core.Entities;
 
 namespace DriverService.Persistence.Configurations.Common;
 

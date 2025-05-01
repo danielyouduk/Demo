@@ -1,16 +1,40 @@
 using DriverService.Application.Features.Drivers.Commands;
+using DriverService.Application.Features.Drivers.Queries.GetDrivers;
+using DriverService.Application.Features.Drivers.Shared;
+using MassTransit;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Services.Core;
+using Services.Core.Helpers;
+using Services.Core.Models;
+using Services.Core.Models.Service;
 
 namespace DriverService.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class DriversController : ControllerBase
+public class DriversController(
+    ISender mediator
+    ) : ControllerBase
 {
     [HttpGet]
-    public IEnumerable<string> Get()
+    public async Task<ActionResult<ServiceResponseCollection<IReadOnlyList<DriverDto>>>> GetDrivers(
+        [FromQuery] PagedRequestQuery pgedRequestQuery)
     {
-        return ["David", "John"];
+        try
+        {
+            var pagedRequest = pgedRequestQuery.ToPagedRequest();
+            
+            var drivers = await mediator.Send(
+                new GetDriversQuery(pagedRequest));
+
+            return Ok(drivers);
+        }
+        catch (RequestFaultException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
     }
     
     [HttpGet("{id:guid}")]

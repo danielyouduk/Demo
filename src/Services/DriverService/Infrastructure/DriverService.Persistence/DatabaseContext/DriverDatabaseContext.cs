@@ -1,6 +1,6 @@
 using DriverService.Domain.Entities;
-using DriverService.Domain.Entities.Common;
 using Microsoft.EntityFrameworkCore;
+using Services.Core.Entities;
 
 namespace DriverService.Persistence.DatabaseContext;
 

@@ -1,4 +1,4 @@
-using DriverService.Domain.Entities.Common;
+using Services.Core.Entities;
 
 namespace DriverService.Domain.Entities;
 

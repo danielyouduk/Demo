@@ -17,7 +17,7 @@ public static class PersistenceServiceRegistrationExtension
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
         });
         
-        services.AddScoped<IDriverRepository, DriverRepository>();
+        services.AddScoped<IDriverQueryRepository, DriverQueryRepository>();
         services.AddScoped<IDriverReportRepository, DriverReportRepository>();
     }
 }
