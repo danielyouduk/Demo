@@ -1,7 +1,6 @@
 using DriverService.Application.Features.Drivers.Commands;
 using DriverService.Application.Features.Drivers.Queries.GetDrivers;
 using DriverService.Application.Features.Drivers.Shared;
-using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Services.Core.Models;
@@ -17,17 +16,10 @@ public class DriversController(ISender mediator) : ControllerBase
     public async Task<ActionResult<ServiceResponseCollection<IReadOnlyList<DriverDto>>>> GetDrivers(
         [FromQuery] PagedRequestQuery pagedRequestQuery)
     {
-        try
-        {
-            var drivers = await mediator.Send(
-                new GetDriversQuery(pagedRequestQuery));
+        var drivers = await mediator.Send(
+            new GetDriversQuery(pagedRequestQuery));
 
-            return Ok(drivers);
-        }
-        catch (RequestFaultException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return Ok(drivers);
     }
     
     [HttpGet("{id:guid}")]
