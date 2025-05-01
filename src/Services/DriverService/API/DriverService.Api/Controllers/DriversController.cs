@@ -4,7 +4,6 @@ using DriverService.Application.Features.Drivers.Shared;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Services.Core;
 using Services.Core.Helpers;
 using Services.Core.Models;
 using Services.Core.Models.Service;
@@ -13,9 +12,7 @@ namespace DriverService.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class DriversController(
-    ISender mediator
-    ) : ControllerBase
+public class DriversController(ISender mediator) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<ServiceResponseCollection<IReadOnlyList<DriverDto>>>> GetDrivers(
@@ -34,7 +31,6 @@ public class DriversController(
         {
             return BadRequest(ex.Message);
         }
-
     }
     
     [HttpGet("{id:guid}")]
