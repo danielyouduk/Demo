@@ -1,4 +1,6 @@
+using DriverService.Application.Contracts.Persistence;
 using DriverService.Persistence.DatabaseContext;
+using DriverService.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,5 +16,8 @@ public static class PersistenceServiceRegistrationExtension
         {
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
         });
+        
+        services.AddScoped<IDriverRepository, DriverRepository>();
+        services.AddScoped<IDriverReportRepository, DriverReportRepository>();
     }
 }

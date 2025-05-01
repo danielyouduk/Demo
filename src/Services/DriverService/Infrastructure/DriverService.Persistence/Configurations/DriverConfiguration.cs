@@ -19,24 +19,19 @@ public class DriverConfiguration : BaseConfiguration<DriverEntity>
         ConfigureSeedData(builder);
     }
 
-    private static void ConfigureTable(EntityTypeBuilder<DriverEntity> builder)
+    protected override void ConfigureTable(EntityTypeBuilder<DriverEntity> builder)
     {
         builder.ToTable(TableName);
     }
-    
-    private static void ConfigureProperties(EntityTypeBuilder<DriverEntity> builder)
+
+    protected override void ConfigureProperties(EntityTypeBuilder<DriverEntity> builder)
     {
         builder.Property(entity => entity.FirstName)
             .IsRequired()
             .HasMaxLength(100);
     }
-    
-    private static void ConfigureRelationships(EntityTypeBuilder<DriverEntity> builder)
-    {
-        
-    }
 
-    private static void ConfigureSeedData(EntityTypeBuilder<DriverEntity> builder)
+    protected override void ConfigureSeedData(EntityTypeBuilder<DriverEntity> builder)
     {
         builder.HasData(
             new DriverEntity

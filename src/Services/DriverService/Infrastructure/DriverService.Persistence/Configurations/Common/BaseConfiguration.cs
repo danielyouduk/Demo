@@ -14,4 +14,12 @@ public abstract class BaseConfiguration<T> : IEntityTypeConfiguration<T> where T
         builder.Property(entity => entity.UpdatedAt)
             .IsRequired();
     }
+
+    protected abstract void ConfigureTable(EntityTypeBuilder<T> builder);
+
+    protected abstract void ConfigureProperties(EntityTypeBuilder<T> builder);
+
+    protected virtual void ConfigureRelationships(EntityTypeBuilder<T> builder) { }
+    
+    protected virtual void ConfigureSeedData(EntityTypeBuilder<T> builder) { }
 }
