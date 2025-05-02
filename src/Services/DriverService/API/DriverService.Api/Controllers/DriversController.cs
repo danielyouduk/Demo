@@ -1,4 +1,5 @@
-using DriverService.Application.Features.Drivers.Commands;
+using DriverService.Application.Features.Drivers.Commands.CreateDriver;
+using DriverService.Application.Features.Drivers.Commands.UpdateDriver;
 using DriverService.Application.Features.Drivers.Queries.GetDrivers;
 using DriverService.Application.Features.Drivers.Shared;
 using MediatR;
@@ -29,9 +30,9 @@ public class DriversController(ISender mediator) : ControllerBase
     }
     
     [HttpPost]
-    public ActionResult Post([FromBody] CreateDriverCommand command)
+    public async Task<ActionResult> Post([FromBody] CreateDriverCommand command)
     {
-        return CreatedAtAction(nameof(Get), new { id = Guid.NewGuid() }, command);
+        return CreatedAtAction(nameof(Get), await mediator.Send(command));
     }
 
     [HttpPut("{id:guid}")]
