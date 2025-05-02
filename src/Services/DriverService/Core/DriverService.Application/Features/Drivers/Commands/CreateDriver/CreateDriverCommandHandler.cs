@@ -1,9 +1,9 @@
 using AutoMapper;
 using DriverService.Application.Contracts.Persistence;
-using DriverService.Application.Features.Drivers.Events;
 using DriverService.Domain.Entities;
 using MassTransit;
 using MediatR;
+using Services.Core.Events.DriverEvents;
 using Services.Core.Models.Service;
 
 namespace DriverService.Application.Features.Drivers.Commands.CreateDriver;

@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Features\Drivers\Events\" />
       <Folder Include="Models\" />
     </ItemGroup>
 

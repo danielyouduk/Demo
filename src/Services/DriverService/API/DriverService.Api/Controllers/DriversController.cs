@@ -32,7 +32,9 @@ public class DriversController(ISender mediator) : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Post([FromBody] CreateDriverCommand command)
     {
-        return CreatedAtAction(nameof(Get), await mediator.Send(command));
+        var newDriver = await mediator.Send(command);
+        
+        return CreatedAtAction(nameof(Get), new { id = newDriver.Data }, newDriver);
     }
 
     [HttpPut("{id:guid}")]

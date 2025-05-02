@@ -18,6 +18,7 @@ public static class PersistenceServiceRegistrationExtension
         });
         
         services.AddScoped<IDriverQueryRepository, DriverQueryRepository>();
+        services.AddScoped<IDriverCommandRepository, DriverCommandRepository>();
         services.AddScoped<IDriverReportRepository, DriverReportRepository>();
     }
 }

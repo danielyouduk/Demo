@@ -1,7 +1,27 @@
+using AccountService.Application.Features.Drivers.Consumers;
+using MassTransit;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+builder.Services.AddMassTransit(config =>
+{
+    config.AddConsumer<DriverCreatedConsumer>();
+
+    config.UsingAzureServiceBus((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration["Azure:ServiceBus:ConnectionString"]);
+
+        // Map the DriverCreated event to the consumer
+        cfg.ReceiveEndpoint("driver-created-queue", e =>
+        {
+            e.ConfigureConsumer<DriverCreatedConsumer>(context);
+        });
+
+    });
+});
 
 var app = builder.Build();
 

@@ -6,4 +6,12 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MassTransit.Azure.ServiceBus.Core" Version="8.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\AccountService.Application\AccountService.Application.csproj" />
+    </ItemGroup>
+
 </Project>

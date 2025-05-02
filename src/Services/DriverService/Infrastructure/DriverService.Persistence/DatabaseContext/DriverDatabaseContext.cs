@@ -21,11 +21,11 @@ public class DriverDatabaseContext(DbContextOptions<DriverDatabaseContext> optio
         foreach (var entry in base.ChangeTracker.Entries<BaseEntity>()
                      .Where(q => q.State is EntityState.Added or EntityState.Modified))
         {
-            entry.Entity.UpdatedAt = DateTime.Now;
+            entry.Entity.UpdatedAt = DateTime.UtcNow;
             
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedAt = DateTime.Now;
+                entry.Entity.CreatedAt = DateTime.UtcNow;
             }
         }
         
