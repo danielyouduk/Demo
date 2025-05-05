@@ -12,18 +12,20 @@ public class DriverCreatedConsumer(IDriverCosmosRepository repository) : IConsum
         try
         {
             var driverCreated = context.Message;
-            var driverDocument = new Driver(
-                id: driverCreated.DriverId.ToString(),
-                FirstName: driverCreated.FirstName,
-                LastName: driverCreated.LastName,
-                CreatedAt: driverCreated.CreatedAt,
-                demo: "test"
-            );
+            var entity = new DriverEntity
+            {
+                PartitionKey = "Driver", // Category (used to cluster similar entities)
+                RowKey = Guid.NewGuid().ToString(), // Unique identifier
+                Category = "Driver",
+                Title = driverCreated.FirstName + " " + driverCreated.LastName,
+                Url = "/drivers/12345"
+            };
 
+            
             // Insert the new driver record into Cosmos DB
-            await repository.AddDriverAsync(driverDocument);
+            await repository.AddDriverAsync(entity);
 
-            Console.WriteLine($"Driver indexed into Cosmos DB: {driverDocument.FirstName}");
+            Console.WriteLine($"Driver indexed into Cosmos DB: {entity.Timestamp}");
         }
         catch (Exception e)
         {

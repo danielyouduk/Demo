@@ -1,33 +1,28 @@
-using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.Options;
+using Azure.Data.Tables;
 using SearchService.Api.Models;
 
 namespace SearchService.Api.Repositories;
 
 public class DriverCosmosRepository : IDriverCosmosRepository
 {
-    private readonly Container _container;
-
-    public DriverCosmosRepository(CosmosClient cosmosClient, IOptions<Settings.Configuration> configurationOptions)
+    public async Task AddDriverAsync(DriverEntity driver)
     {
-        if (cosmosClient == null)
-            throw new ArgumentNullException(nameof(cosmosClient));
+        string connectionString = "AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;DefaultEndpointsProtocol=http;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;";
+        TableServiceClient serviceClient = new TableServiceClient(connectionString);
 
-        var database = cosmosClient.GetDatabase(configurationOptions.Value.Azure.CosmosDb.DatabaseName);
-        _container = database.GetContainer(configurationOptions.Value.Azure.CosmosDb.ContainerName);
+        // Create a table client for a specific table
+        var tableClient = serviceClient.GetTableClient(tableName: "drivers");
+        await tableClient.CreateIfNotExistsAsync();
+
+        
+        await tableClient.AddEntityAsync(driver);
+
+        Console.WriteLine($"Added entity: {driver.Title}");
+
     }
 
-    
-    public async Task AddDriverAsync(Driver driver)
+    public async Task<ITableEntity> GetDriverByIdAsync(string id)
     {
-        await _container.UpsertItemAsync<Driver>(
-            item: driver,
-            partitionKey: new PartitionKey(driver.demo)
-        );
-    }
-
-    public async Task<Driver> GetDriverByIdAsync(string id)
-    {
-        return await _container.ReadItemAsync<Driver>(id, new PartitionKey("demo"));
+        throw new NotImplementedException();
     }
 }

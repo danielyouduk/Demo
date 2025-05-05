@@ -1,10 +1,11 @@
+using Azure.Data.Tables;
 using SearchService.Api.Models;
 
 namespace SearchService.Api.Repositories;
 
 public interface IDriverCosmosRepository
 {
-    Task AddDriverAsync(Driver driver);
+    Task AddDriverAsync(DriverEntity driver);
 
-    Task<Driver> GetDriverByIdAsync(string id);
+    Task<ITableEntity> GetDriverByIdAsync(string id);
 }

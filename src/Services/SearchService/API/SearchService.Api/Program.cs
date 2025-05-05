@@ -1,7 +1,5 @@
 using Azure.Search.Documents;
 using MassTransit;
-using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.Options;
 using SearchService.Api.Consumers;
 using SearchService.Api.Repositories;
 using SearchService.Api.Services;
@@ -13,17 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddOptions<Settings.Configuration>().Bind(builder.Configuration.GetSection(nameof(Settings.Configuration)));
-
-builder.Services.AddSingleton<CosmosClient>((serviceProvider) =>
-{
-    var configurationOptions = serviceProvider.GetRequiredService<IOptions<Settings.Configuration>>();
-    var configuration = configurationOptions.Value;
-
-    CosmosClient client = new(
-        connectionString: configuration.Azure.CosmosDb.ConnectionString
-    );
-    return client;
-});
 
 builder.Services.AddMassTransit(config =>
 {
