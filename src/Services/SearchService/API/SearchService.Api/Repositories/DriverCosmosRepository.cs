@@ -1,34 +1,33 @@
 using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Options;
+using SearchService.Api.Models;
 
 namespace SearchService.Api.Repositories;
 
-public class DriverCosmosRepository(
-    CosmosClient cosmosClient, string databaseName, string containerName)
+public class DriverCosmosRepository : IDriverCosmosRepository
 {
-    private readonly Container _container = cosmosClient.GetContainer(databaseName, containerName);
+    private readonly Container _container;
 
-    
-    public async Task AddDriverAsync(DriverDocument driver)
+    public DriverCosmosRepository(CosmosClient cosmosClient, IOptions<Settings.Configuration> configurationOptions)
     {
-        await _container.CreateItemAsync(driver, new PartitionKey("/demo"));
+        if (cosmosClient == null)
+            throw new ArgumentNullException(nameof(cosmosClient));
+
+        var database = cosmosClient.GetDatabase(configurationOptions.Value.Azure.CosmosDb.DatabaseName);
+        _container = database.GetContainer(configurationOptions.Value.Azure.CosmosDb.ContainerName);
     }
 
-    public async Task<DriverDocument> GetDriverByIdAsync(string id)
+    
+    public async Task AddDriverAsync(Driver driver)
     {
-        return await _container.ReadItemAsync<DriverDocument>(id, new PartitionKey("/demo"));
-
+        await _container.UpsertItemAsync<Driver>(
+            item: driver,
+            partitionKey: new PartitionKey(driver.demo)
+        );
     }
 
-    public record DriverDocument
+    public async Task<Driver> GetDriverByIdAsync(string id)
     {
-        public string Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        return await _container.ReadItemAsync<Driver>(id, new PartitionKey("demo"));
     }
-    
-    
-
-
 }

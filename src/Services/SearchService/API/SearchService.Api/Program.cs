@@ -1,35 +1,29 @@
 using Azure.Search.Documents;
 using MassTransit;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Options;
 using SearchService.Api.Consumers;
 using SearchService.Api.Repositories;
 using SearchService.Api.Services;
+using Settings = SearchService.Api.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton(s =>
+builder.Services.AddOptions<Settings.Configuration>().Bind(builder.Configuration.GetSection(nameof(Settings.Configuration)));
+
+builder.Services.AddSingleton<CosmosClient>((serviceProvider) =>
 {
-    var configuration = s.GetService<IConfiguration>();
-    var cosmosClient = new CosmosClient(configuration["Azure:CosmosDb:ConnectionString"]);
+    var configurationOptions = serviceProvider.GetRequiredService<IOptions<Settings.Configuration>>();
+    var configuration = configurationOptions.Value;
 
-    // Pass the correct settings to the repository
-    var repository = new DriverCosmosRepository(
-        cosmosClient,
-        configuration["Azure:CosmosDb:DatabaseName"],
-        configuration["Azure:CosmosDb:ContainerName"]);
-    
-    InitializeCosmosDbAsync(
-        cosmosClient, 
-        configuration["Azure:CosmosDb:DatabaseName"], 
-        configuration["Azure:CosmosDb:ContainerName"]
-    ).GetAwaiter().GetResult(); 
-    
-    return repository;
+    CosmosClient client = new(
+        connectionString: configuration.Azure.CosmosDb.ConnectionString
+    );
+    return client;
 });
-
 
 builder.Services.AddMassTransit(config =>
 {
@@ -37,9 +31,7 @@ builder.Services.AddMassTransit(config =>
 
     config.UsingAzureServiceBus((context, cfg) =>
     {
-        cfg.Host(builder.Configuration["Azure:ServiceBus:ConnectionString"]);
-
-        // Configure the DriverCreatedConsumer for this service
+        cfg.Host(builder.Configuration["Configuration:Azure:ServiceBus:ConnectionString"]);
         cfg.ReceiveEndpoint("driver-created-search-queue", e =>
         {
             e.ConfigureConsumer<DriverCreatedConsumer>(context);
@@ -50,12 +42,13 @@ builder.Services.AddMassTransit(config =>
 builder.Services.AddSingleton(s =>
 {
     return new SearchClient(
-        new Uri(builder.Configuration["Azure:AzureSearch:Endpoint"]),
-        builder.Configuration["Azure:AzureSearch:IndexName"],
-        new Azure.AzureKeyCredential(builder.Configuration["Azure:AzureSearch:ApiKey"]));
+        new Uri(builder.Configuration["Configuration:Azure:AzureSearch:Endpoint"]),
+        builder.Configuration["Configuration:Azure:AzureSearch:IndexName"],
+        new Azure.AzureKeyCredential(builder.Configuration["Configuration:Azure:AzureSearch:ApiKey"]));
 });
 
 builder.Services.AddScoped<DriverSearchService>();
+builder.Services.AddScoped<IDriverCosmosRepository, DriverCosmosRepository>();
 
 
 var app = builder.Build();
@@ -64,16 +57,3 @@ var app = builder.Build();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
-
-
-
-static async Task InitializeCosmosDbAsync(CosmosClient cosmosClient, string databaseName, string containerName)
-{
-    var database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName);
-    // Customize partition key path as per your design
-    await database.Database.CreateContainerIfNotExistsAsync(new ContainerProperties
-    {
-        Id = containerName,
-        PartitionKeyPath = "/demo"
-    });
-}
