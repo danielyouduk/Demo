@@ -3,7 +3,6 @@ using DriverService.Application.Contracts.Persistence;
 using DriverService.Application.Features.Drivers.Shared;
 using DriverService.Persistence.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
-using Services.Core;
 using Services.Core.Helpers;
 using Services.Core.Models;
 
@@ -35,8 +34,10 @@ public class DriverQueryRepository(DriverDatabaseContext context, IMapper mapper
         };
     }
 
-    public Task<object> GetDriverById(Guid id)
+    public async Task<DriverDto> GetDriverByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var driver = await context.Drivers.FirstOrDefaultAsync(driver => driver.Id == id);
+
+        return mapper.Map<DriverDto>(driver);
     }
 }

@@ -1,5 +1,6 @@
 using DriverService.Application.Features.Drivers.Commands.CreateDriver;
 using DriverService.Application.Features.Drivers.Commands.UpdateDriver;
+using DriverService.Application.Features.Drivers.Queries.GetDriver;
 using DriverService.Application.Features.Drivers.Queries.GetDrivers;
 using DriverService.Application.Features.Drivers.Shared;
 using MediatR;
@@ -9,11 +10,14 @@ using Services.Core.Models.Service;
 
 namespace DriverService.Api.Controllers;
 
+// todo: Add Authorize attribute
 [ApiController]
 [Route("api/[controller]")]
 public class DriversController(ISender mediator) : ControllerBase
 {
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)] 
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ServiceResponseCollection<IReadOnlyList<DriverDto>>>> GetDrivers(
         [FromQuery] PagedRequestQuery pagedRequestQuery)
     {
@@ -24,9 +28,19 @@ public class DriversController(ISender mediator) : ControllerBase
     }
     
     [HttpGet("{id:guid}")]
-    public string Get(Guid id)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ServiceResponse<DriverDto?>>> Get([FromRoute] Guid id)
     {
-        return "David";
+        var response = await mediator.Send(new GetDriverQuery { Id = id });
+
+        if (response.Data is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(response);
     }
     
     [HttpPost]

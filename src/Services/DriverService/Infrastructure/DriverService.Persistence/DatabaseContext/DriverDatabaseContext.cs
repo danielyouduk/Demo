@@ -7,8 +7,6 @@ namespace DriverService.Persistence.DatabaseContext;
 public class DriverDatabaseContext(DbContextOptions<DriverDatabaseContext> options) : DbContext(options)
 {
     public DbSet<DriverEntity> Drivers { get; set; }
-    
-    public DbSet<ReportEntity> Reports { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
