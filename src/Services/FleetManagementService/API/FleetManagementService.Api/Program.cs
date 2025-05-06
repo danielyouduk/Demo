@@ -1,3 +1,4 @@
+using FleetManagementService.Application.Extensions;
 using FleetManagementService.Application.Features.Driver.Consumers;
 using FleetManagementService.Persistence.Extensions;
 using MassTransit;
@@ -6,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-
+builder.Services.AddApplicationServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 
 builder.Services.AddMassTransit(config =>

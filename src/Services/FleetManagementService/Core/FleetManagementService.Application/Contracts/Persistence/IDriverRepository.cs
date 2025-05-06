@@ -10,7 +10,7 @@ public interface IDriverRepository
     
     Task<DriverDto> GetDriverByIdAsync(Guid id);
     
-    Task<DriverDto> CreateDriver(DriverEntity driver);
+    Task<DriverDto> CreateDriver(Driver driver);
     
     Task UpdateDriver(object driver);
 }

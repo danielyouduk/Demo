@@ -15,7 +15,7 @@ public class CreateDriverCommandHandler(
 {
     public async Task<ServiceResponse<Guid>> Handle(CreateDriverCommand request, CancellationToken cancellationToken)
     {
-        var driver = await driverCommandRepository.CreateDriver(mapper.Map<DriverEntity>(request));
+        var driver = await driverCommandRepository.CreateDriver(mapper.Map<Domain.Entities.Driver>(request));
 
         await publishEndpoint.Publish(new DriverCreated(driver.Id, driver.FirstName, driver.LastName, driver.CreatedAt), cancellationToken);
         

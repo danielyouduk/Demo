@@ -5,11 +5,11 @@ using Services.Core.ConfigurationExtensions;
 
 namespace FleetManagementService.Persistence.Configurations;
 
-public class VehicleConfiguration : BaseConfiguration<VehicleEntity>
+public class VehicleConfiguration : BaseConfiguration<Vehicle>
 {
     private const string TableName = "Vehicle";
     
-    public override void Configure(EntityTypeBuilder<VehicleEntity> builder)
+    public override void Configure(EntityTypeBuilder<Vehicle> builder)
     {
         base.Configure(builder);
         
@@ -19,12 +19,12 @@ public class VehicleConfiguration : BaseConfiguration<VehicleEntity>
         ConfigureSeedData(builder);
     }
     
-    protected override void ConfigureTable(EntityTypeBuilder<VehicleEntity> builder)
+    protected override void ConfigureTable(EntityTypeBuilder<Vehicle> builder)
     {
         builder.ToTable(TableName);
     }
 
-    protected override void ConfigureProperties(EntityTypeBuilder<VehicleEntity> builder)
+    protected override void ConfigureProperties(EntityTypeBuilder<Vehicle> builder)
     {
         builder.Property(entity => entity.AccountId)
             .IsRequired();
@@ -34,10 +34,10 @@ public class VehicleConfiguration : BaseConfiguration<VehicleEntity>
             .HasMaxLength(100);
     }
 
-    protected override void ConfigureSeedData(EntityTypeBuilder<VehicleEntity> builder)
+    protected override void ConfigureSeedData(EntityTypeBuilder<Vehicle> builder)
     {
         builder.HasData(
-            new VehicleEntity
+            new Vehicle
             {
                 Id = new Guid("63e1389a-571c-491e-9c60-bb98c838d0e2"),
                 AccountId = new Guid("63e1389a-571c-491e-9c60-bb98c838d0e2"),

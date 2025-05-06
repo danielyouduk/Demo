@@ -42,7 +42,7 @@ public class DriverRepository(AccountDatabaseContext context, IMapper mapper) : 
         return mapper.Map<DriverDto>(driver);
     }
     
-    public async Task<DriverDto> CreateDriver(DriverEntity driver)
+    public async Task<DriverDto> CreateDriver(Driver driver)
     {
         await context.AddAsync(driver);
         await context.SaveChangesAsync();

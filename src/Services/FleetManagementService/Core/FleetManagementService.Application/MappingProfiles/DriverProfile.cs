@@ -9,7 +9,16 @@ public class DriverProfile : Profile
 {
     public DriverProfile()
     {
-        CreateMap<DriverDto, DriverEntity>().ReverseMap();
-        CreateMap<CreateDriverCommand, DriverEntity>().ReverseMap();
+        #region Command Mappings
+        
+        CreateMap<CreateDriverCommand, Driver>().ReverseMap();
+        
+        #endregion
+        
+        #region Query Mappings
+
+        CreateMap<DriverDto, Driver>().ReverseMap();
+
+        #endregion
     }
 }

@@ -2,7 +2,7 @@ using Services.Core.Entities;
 
 namespace FleetManagementService.Domain.Entities;
 
-public class VehicleEntity : BaseEntity
+public class Vehicle : BaseEntity
 {
     public required Guid AccountId { get; init; }
 

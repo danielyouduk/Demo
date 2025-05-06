@@ -18,7 +18,7 @@ public class Account : BaseEntity
     
     public int NoOfReportsSubmitted { get; set; }
     
-    public ICollection<DriverEntity>? Drivers { get; set; }
+    public ICollection<Driver>? Drivers { get; set; }
 
-    public ICollection<VehicleEntity>? Vehicles { get; set; }
+    public ICollection<Vehicle>? Vehicles { get; set; }
 }

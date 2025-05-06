@@ -9,9 +9,9 @@ public class AccountDatabaseContext(DbContextOptions<AccountDatabaseContext> opt
 {
     public DbSet<Account> Accounts { get; set; }
     
-    public DbSet<VehicleEntity> Vehicles { get; set; }
+    public DbSet<Vehicle> Vehicles { get; set; }
     
-    public DbSet<DriverEntity> Drivers { get; set; }
+    public DbSet<Driver> Drivers { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
