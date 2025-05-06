@@ -4,7 +4,6 @@ using Services.Core.DatabaseContext;
 
 namespace FleetManagementService.Persistence.DatabaseContext;
 
-// todo: Rename
 public class FleetManagementDatabaseContext(DbContextOptions<FleetManagementDatabaseContext> options) : BaseDatabaseContext<FleetManagementDatabaseContext>(options)
 {
     public DbSet<Account> Accounts { get; set; }
