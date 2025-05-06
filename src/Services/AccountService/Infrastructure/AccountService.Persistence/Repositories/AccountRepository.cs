@@ -10,7 +10,7 @@ namespace AccountService.Persistence.Repositories;
 
 public class AccountRepository(AccountDatabaseContext context, IMapper mapper) : IAccountRepository
 {
-    public async Task<BasePagedResult<AccountDto>> GetAccountsAsync(PagedRequestQuery pagedRequestQuery, string userId, bool isAdmin, int? accountId = null)
+    public async Task<BasePagedResult<AccountDto>> GetAccountsAsync(PagedRequestQuery pagedRequestQuery)
     {
         // Base query
         var query = context.Accounts

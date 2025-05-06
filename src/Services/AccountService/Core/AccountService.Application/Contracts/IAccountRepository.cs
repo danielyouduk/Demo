@@ -5,7 +5,7 @@ namespace AccountService.Application.Contracts;
 
 public interface IAccountRepository
 {
-    Task<BasePagedResult<AccountDto>> GetAccountsAsync(PagedRequestQuery pagedRequestQuery, string userId, bool isAdmin, int? accountId = null);
+    Task<BasePagedResult<AccountDto>> GetAccountsAsync(PagedRequestQuery pagedRequestQuery);
     
     Task<AccountDto?> GetAccountByIdAsync(Guid id);
 }

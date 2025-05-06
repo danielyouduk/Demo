@@ -92,8 +92,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchService.Api", "src\Services\SearchService\API\SearchService.Api\SearchService.Api.csproj", "{93E8C719-EF2B-4C2C-A4B6-80A7C155FE9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressLookupService", "src\Services\AddressLookupService\API\AddressLookupService\AddressLookupService.csproj", "{729941FB-FA14-4907-954E-82821E10DD48}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressLookupService.Domain", "src\Services\AddressLookupService\Core\AddressLookupService.Domain\AddressLookupService.Domain.csproj", "{EEC32341-DBD4-49C7-8229-13607530DA9B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChecklistService.Api", "src\Services\ChecklistService\API\ChecklistService.Api\ChecklistService.Api.csproj", "{25F635E3-6CDA-418A-98F8-4FE39E4832A7}"
@@ -101,6 +99,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportService.Api", "src\Services\ReportService\API\ReportService.Api\ReportService.Api.csproj", "{AB16157B-9A1C-498C-96C0-330DAD160A48}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountService.Persistence", "src\Services\AccountService\Infrastructure\AccountService.Persistence\AccountService.Persistence.csproj", "{2E585B05-AAA4-48ED-B6A4-6869AD465582}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressLookupService.Persistence", "src\Services\AddressLookupService\Infrastructure\AddressLookupService.Persistence\AddressLookupService.Persistence.csproj", "{36EB4E64-FE48-4874-9F3B-E6567868F1F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressLookupService.Application", "src\Services\AddressLookupService\Core\AddressLookupService.Application\AddressLookupService.Application.csproj", "{50F288A5-8463-4FD9-921B-4958771FE1B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressLookupService.Api", "src\Services\AddressLookupService\API\AddressLookupService.Api\AddressLookupService.Api.csproj", "{72507ABF-3BC3-4701-963D-8015983A13E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleService.Application", "src\Services\VehicleService\Core\VehicleService.Application\VehicleService.Application.csproj", "{EE0E4B71-7A7A-4F4E-85C4-94CE599460EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleService.Domain", "src\Services\VehicleService\Core\VehicleService.Domain\VehicleService.Domain.csproj", "{F5028181-5681-48A2-A5F4-0A2C16790C70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleService.Persistence", "src\Services\VehicleService\Infrastructure\VehicleService.Persistence\VehicleService.Persistence.csproj", "{B998023D-AE7D-43D4-93BD-E502735970C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -152,11 +162,16 @@ Global
 		{0AC5CFA0-F151-42B6-8BA3-80DA933CC1A9} = {FCD7E645-90D8-408F-8536-2452F806AE42}
 		{7181DC84-84A3-4388-A9B0-F8A21FD608B7} = {FCD7E645-90D8-408F-8536-2452F806AE42}
 		{93E8C719-EF2B-4C2C-A4B6-80A7C155FE9E} = {37618D48-65B8-4021-9BB6-6540281C5EAE}
-		{729941FB-FA14-4907-954E-82821E10DD48} = {1C1BEC15-0DF1-4FFC-B9E1-D1035BB0E28C}
 		{EEC32341-DBD4-49C7-8229-13607530DA9B} = {39134004-41B0-4C3F-AEF8-C1FC65FCD530}
 		{25F635E3-6CDA-418A-98F8-4FE39E4832A7} = {B0C5C813-8509-4640-9826-E2EE10790801}
 		{AB16157B-9A1C-498C-96C0-330DAD160A48} = {E4DAD728-C0C2-42E7-A3B6-43ECB37109E1}
 		{2E585B05-AAA4-48ED-B6A4-6869AD465582} = {53967F77-20E4-4858-A4E4-32CAFA64F1BA}
+		{36EB4E64-FE48-4874-9F3B-E6567868F1F1} = {127B2C52-D959-4B63-A15A-B6172DF9CE3D}
+		{50F288A5-8463-4FD9-921B-4958771FE1B2} = {39134004-41B0-4C3F-AEF8-C1FC65FCD530}
+		{72507ABF-3BC3-4701-963D-8015983A13E7} = {1C1BEC15-0DF1-4FFC-B9E1-D1035BB0E28C}
+		{EE0E4B71-7A7A-4F4E-85C4-94CE599460EB} = {7486C0C9-896A-4961-87F9-0064152655B8}
+		{F5028181-5681-48A2-A5F4-0A2C16790C70} = {7486C0C9-896A-4961-87F9-0064152655B8}
+		{B998023D-AE7D-43D4-93BD-E502735970C5} = {ECF4DDD3-C6D1-4C8D-A8C7-E15F3736D2EC}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7467D75F-1F53-4180-8614-F42E3B135D3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -199,10 +214,6 @@ Global
 		{93E8C719-EF2B-4C2C-A4B6-80A7C155FE9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93E8C719-EF2B-4C2C-A4B6-80A7C155FE9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93E8C719-EF2B-4C2C-A4B6-80A7C155FE9E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{729941FB-FA14-4907-954E-82821E10DD48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{729941FB-FA14-4907-954E-82821E10DD48}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{729941FB-FA14-4907-954E-82821E10DD48}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{729941FB-FA14-4907-954E-82821E10DD48}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EEC32341-DBD4-49C7-8229-13607530DA9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EEC32341-DBD4-49C7-8229-13607530DA9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEC32341-DBD4-49C7-8229-13607530DA9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -219,5 +230,29 @@ Global
 		{2E585B05-AAA4-48ED-B6A4-6869AD465582}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E585B05-AAA4-48ED-B6A4-6869AD465582}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E585B05-AAA4-48ED-B6A4-6869AD465582}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36EB4E64-FE48-4874-9F3B-E6567868F1F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36EB4E64-FE48-4874-9F3B-E6567868F1F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36EB4E64-FE48-4874-9F3B-E6567868F1F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36EB4E64-FE48-4874-9F3B-E6567868F1F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50F288A5-8463-4FD9-921B-4958771FE1B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50F288A5-8463-4FD9-921B-4958771FE1B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50F288A5-8463-4FD9-921B-4958771FE1B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50F288A5-8463-4FD9-921B-4958771FE1B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72507ABF-3BC3-4701-963D-8015983A13E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72507ABF-3BC3-4701-963D-8015983A13E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72507ABF-3BC3-4701-963D-8015983A13E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72507ABF-3BC3-4701-963D-8015983A13E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE0E4B71-7A7A-4F4E-85C4-94CE599460EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE0E4B71-7A7A-4F4E-85C4-94CE599460EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE0E4B71-7A7A-4F4E-85C4-94CE599460EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE0E4B71-7A7A-4F4E-85C4-94CE599460EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5028181-5681-48A2-A5F4-0A2C16790C70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5028181-5681-48A2-A5F4-0A2C16790C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5028181-5681-48A2-A5F4-0A2C16790C70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5028181-5681-48A2-A5F4-0A2C16790C70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B998023D-AE7D-43D4-93BD-E502735970C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B998023D-AE7D-43D4-93BD-E502735970C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B998023D-AE7D-43D4-93BD-E502735970C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B998023D-AE7D-43D4-93BD-E502735970C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

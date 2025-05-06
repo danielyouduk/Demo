@@ -4,7 +4,7 @@ namespace AddressLookupService.Domain.Entities;
 
 public class AddressEntity : BaseEntity
 {
-    public int AccountId { get; set; }
+    public Guid AccountId { get; set; }
     
     public string? Street { get; set; }
     
