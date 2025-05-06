@@ -1,3 +1,5 @@
+using FleetManagementService.Application.Features.Account.Commands.CreateAccount;
+using FleetManagementService.Application.Features.Account.Commands.UpdateAccount;
 using FleetManagementService.Application.Features.Account.Queries.GetAccount;
 using FleetManagementService.Application.Features.Account.Queries.GetAccounts;
 using FleetManagementService.Application.Features.Account.Shared;
@@ -31,11 +33,37 @@ public class AccountsController(ISender mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ServiceResponse<AccountDto>>> Get(
+    public async Task<ActionResult<ServiceResponse<AccountDto>>> GetAccountById(
         [FromRoute] Guid id)
     {
         var account = await mediator.Send(new GetAccountQuery(id));
         
         return Ok(account);
+    }
+    
+    // POST api/accounts
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ServiceResponse<AccountDto>>> Post(
+        [FromBody] CreateAccountCommand createAccountCommand)
+    {
+        var result = await mediator.Send(createAccountCommand);
+        
+        return CreatedAtAction(nameof(GetAccountById), new { id = result.Data.Id }, result);
+    }
+    
+    // PUT api/accounts/:id
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ServiceResponse<Unit>>> Put(
+        [FromBody] UpdateAccountCommand updateAccountCommand)
+    {
+        await mediator.Send(updateAccountCommand);
+
+        return NoContent();
     }
 }

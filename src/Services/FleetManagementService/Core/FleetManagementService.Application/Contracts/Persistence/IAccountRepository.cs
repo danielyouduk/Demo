@@ -1,3 +1,4 @@
+using FleetManagementService.Application.Features.Account.Commands.CreateAccount;
 using FleetManagementService.Application.Features.Account.Shared;
 using Services.Core.Models;
 
@@ -8,4 +9,6 @@ public interface IAccountRepository
     Task<BasePagedResult<AccountDto>> GetAccountsAsync(PagedRequestQuery pagedRequestQuery);
     
     Task<AccountDto?> GetAccountByIdAsync(Guid id);
+    
+    Task<AccountDto> CreateAsync(CreateAccountCommand account);
 }

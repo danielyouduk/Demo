@@ -1,6 +1,5 @@
 using AutoMapper;
 using FleetManagementService.Application.Contracts.Persistence;
-using FleetManagementService.Domain.Entities;
 using MassTransit;
 using MediatR;
 using Services.Core.Events.DriverEvents;

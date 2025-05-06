@@ -14,25 +14,21 @@ public class DriverCreatedConsumer(IDriverCosmosRepository repository) : IConsum
             var driverCreated = context.Message;
             var entity = new DriverEntity
             {
-                PartitionKey = "Driver", // Category (used to cluster similar entities)
-                RowKey = Guid.NewGuid().ToString(), // Unique identifier
+                PartitionKey = "Driver",
+                RowKey = Guid.NewGuid().ToString(),
                 Category = "Driver",
                 Title = driverCreated.FirstName + " " + driverCreated.LastName,
                 Url = "/drivers/12345"
             };
-
             
-            // Insert the new driver record into Cosmos DB
             await repository.AddDriverAsync(entity);
 
-            Console.WriteLine($"Driver indexed into Cosmos DB: {entity.Timestamp}");
+            Console.WriteLine($"Driver indexed into Azure Table Storage: {entity.Timestamp}");
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             throw;
         }
-        
     }
-
 }

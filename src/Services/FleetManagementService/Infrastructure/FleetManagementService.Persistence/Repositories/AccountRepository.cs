@@ -2,6 +2,7 @@ using FleetManagementService.Application.Features.Account.Shared;
 using FleetManagementService.Persistence.DatabaseContext;
 using AutoMapper;
 using FleetManagementService.Application.Contracts.Persistence;
+using FleetManagementService.Application.Features.Account.Commands.CreateAccount;
 using Microsoft.EntityFrameworkCore;
 using Services.Core.Helpers;
 using Services.Core.Models;
@@ -39,5 +40,10 @@ public class AccountRepository(FleetManagementDatabaseContext context, IMapper m
         var account = await context.Accounts.FirstOrDefaultAsync(account => account.Id == id);
 
         return mapper.Map<AccountDto>(account);
+    }
+
+    public Task<AccountDto> CreateAsync(CreateAccountCommand account)
+    {
+        throw new NotImplementedException();
     }
 }
