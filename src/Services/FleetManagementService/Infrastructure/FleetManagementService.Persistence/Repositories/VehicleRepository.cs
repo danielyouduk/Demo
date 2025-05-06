@@ -8,7 +8,7 @@ using Services.Core.Models;
 
 namespace FleetManagementService.Persistence.Repositories;
 
-public class VehicleRepository(AccountDatabaseContext context, IMapper mapper) : IVehicleRepository
+public class VehicleRepository(FleetManagementDatabaseContext context, IMapper mapper) : IVehicleRepository
 {
     public async Task<BasePagedResult<VehicleDto>> GetVehiclesAsync(PagedRequestQuery pagedRequestQuery)
     {

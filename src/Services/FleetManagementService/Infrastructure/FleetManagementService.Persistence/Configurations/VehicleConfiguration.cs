@@ -42,8 +42,8 @@ public class VehicleConfiguration : BaseConfiguration<Vehicle>
                 Id = new Guid("63e1389a-571c-491e-9c60-bb98c838d0e2"),
                 AccountId = new Guid("63e1389a-571c-491e-9c60-bb98c838d0e2"),
                 RegistrationNumber = "MW63 LRN",
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             });
     }
 }

@@ -9,7 +9,7 @@ using Services.Core.Models;
 
 namespace FleetManagementService.Persistence.Repositories;
 
-public class DriverRepository(AccountDatabaseContext context, IMapper mapper) : IDriverRepository
+public class DriverRepository(FleetManagementDatabaseContext context, IMapper mapper) : IDriverRepository
 {
     public async Task<BasePagedResult<DriverDto>> GetDriversAsync(PagedRequestQuery pagedRequestQuery)
     {

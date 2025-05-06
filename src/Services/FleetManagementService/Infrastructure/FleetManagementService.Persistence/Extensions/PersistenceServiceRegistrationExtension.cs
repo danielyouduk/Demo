@@ -12,11 +12,13 @@ public static class PersistenceServiceRegistrationExtension
     public static void AddPersistenceServices(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddDbContext<AccountDatabaseContext>(options =>
+        services.AddDbContext<FleetManagementDatabaseContext>(options =>
         {
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
         });
 
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<IVehicleRepository, VehicleRepository>();
+        services.AddScoped<IDriverRepository, DriverRepository>();
     }
 }

@@ -8,7 +8,7 @@ using Services.Core.Models;
 
 namespace FleetManagementService.Persistence.Repositories;
 
-public class AccountRepository(AccountDatabaseContext context, IMapper mapper) : IAccountRepository
+public class AccountRepository(FleetManagementDatabaseContext context, IMapper mapper) : IAccountRepository
 {
     public async Task<BasePagedResult<AccountDto>> GetAccountsAsync(PagedRequestQuery pagedRequestQuery)
     {

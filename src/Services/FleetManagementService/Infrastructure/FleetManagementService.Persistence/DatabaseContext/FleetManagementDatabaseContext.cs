@@ -5,7 +5,7 @@ using Services.Core.DatabaseContext;
 namespace FleetManagementService.Persistence.DatabaseContext;
 
 // todo: Rename
-public class AccountDatabaseContext(DbContextOptions<AccountDatabaseContext> options) : BaseDatabaseContext<AccountDatabaseContext>(options)
+public class FleetManagementDatabaseContext(DbContextOptions<FleetManagementDatabaseContext> options) : BaseDatabaseContext<FleetManagementDatabaseContext>(options)
 {
     public DbSet<Account> Accounts { get; set; }
     
@@ -16,6 +16,6 @@ public class AccountDatabaseContext(DbContextOptions<AccountDatabaseContext> opt
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AccountDatabaseContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(FleetManagementDatabaseContext).Assembly);
     }
 }
