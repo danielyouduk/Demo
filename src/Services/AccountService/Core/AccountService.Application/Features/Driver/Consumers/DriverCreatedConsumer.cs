@@ -1,7 +1,7 @@
 using MassTransit;
 using Services.Core.Events.DriverEvents;
 
-namespace AccountService.Application.Features.Drivers.Consumers;
+namespace AccountService.Application.Features.Driver.Consumers;
 
 public class DriverCreatedConsumer : IConsumer<DriverCreated>
 {

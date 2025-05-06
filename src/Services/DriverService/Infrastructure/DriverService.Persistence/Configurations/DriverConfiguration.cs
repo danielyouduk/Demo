@@ -1,7 +1,7 @@
 using DriverService.Domain.Entities;
-using DriverService.Persistence.Configurations.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Services.Core.ConfigurationExtensions;
 
 namespace DriverService.Persistence.Configurations;
 

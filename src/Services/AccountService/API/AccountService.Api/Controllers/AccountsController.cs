@@ -1,3 +1,6 @@
+using AccountService.Application.Features.Account.Queries.GetAccount;
+using AccountService.Application.Features.Account.Queries.GetAccounts;
+using AccountService.Application.Features.Account.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Services.Core.Models;
@@ -18,7 +21,7 @@ public class AccountsController(ISender mediator) : ControllerBase
         [FromQuery] PagedRequestQuery pagedRequestQuery)
     {
         var accounts = await mediator.Send(
-            new GetAccountsQuery(pagedRequestQuery, accountId));
+            new GetAccountsQuery(pagedRequestQuery));
 
         return Ok(accounts);
     }

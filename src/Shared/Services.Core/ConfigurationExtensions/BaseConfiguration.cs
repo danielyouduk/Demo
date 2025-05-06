@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Services.Core.Entities;
 
-namespace DriverService.Persistence.Configurations.Common;
+namespace Services.Core.ConfigurationExtensions;
 
 public abstract class BaseConfiguration<T> : IEntityTypeConfiguration<T> where T : BaseEntity
 {

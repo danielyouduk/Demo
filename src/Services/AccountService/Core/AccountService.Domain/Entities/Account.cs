@@ -8,7 +8,7 @@ public class Account : BaseEntity
     
     public string? CompanyVatNumber { get; set; }
     
-    public int? BillingAddressId { get; set; }
+    public Guid BillingAddressId { get; set; }
     
     public int NoOfActiveDrivers { get; set; }
     

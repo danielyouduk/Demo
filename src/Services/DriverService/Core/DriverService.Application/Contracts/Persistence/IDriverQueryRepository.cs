@@ -6,7 +6,7 @@ namespace DriverService.Application.Contracts.Persistence;
 
 public interface IDriverQueryRepository
 {
-    Task<BasePagedResult<DriverDto>> GetDriversAsync(PagedRequestQuery paginationParameters);
+    Task<BasePagedResult<DriverDto>> GetDriversAsync(PagedRequestQuery pagedRequestQuery);
     
     Task<DriverDto> GetDriverByIdAsync(Guid id);
 }

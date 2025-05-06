@@ -1,10 +1,12 @@
-using AccountService.Application.Features.Drivers.Consumers;
+using AccountService.Application.Features.Driver.Consumers;
+using AccountService.Persistence.Extensions;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddPersistenceServices(builder.Configuration);
 
 builder.Services.AddMassTransit(config =>
 {

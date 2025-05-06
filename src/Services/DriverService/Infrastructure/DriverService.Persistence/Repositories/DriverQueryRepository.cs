@@ -10,26 +10,26 @@ namespace DriverService.Persistence.Repositories;
 
 public class DriverQueryRepository(DriverDatabaseContext context, IMapper mapper) : IDriverQueryRepository
 {
-    public async Task<BasePagedResult<DriverDto>> GetDriversAsync(PagedRequestQuery paginationParameters)
+    public async Task<BasePagedResult<DriverDto>> GetDriversAsync(PagedRequestQuery pagedRequestQuery)
     {
         // Base query
         var query = context.Drivers
             .AsQueryable();
         
         // Apply sorting
-        query = OrderingHelper.ApplyOrdering(query, paginationParameters.SortBy, paginationParameters.SortDescending);
+        query = OrderingHelper.ApplyOrdering(query, pagedRequestQuery.SortBy, pagedRequestQuery.SortDescending);
         
         // Execute the query with pagination
         var queryCount = await query.CountAsync();
         
         // Apply pagination
-        var vehicles = await query.ApplyPaging(paginationParameters)
+        var drivers = await query.ApplyPaging(pagedRequestQuery)
             .ToListAsync();
         
         // Map and return the final result
         return new BasePagedResult<DriverDto>
         {
-            Data = mapper.Map<IReadOnlyCollection<DriverDto>>(vehicles),
+            Data = mapper.Map<IReadOnlyCollection<DriverDto>>(drivers),
             TotalRecords = queryCount
         };
     }
