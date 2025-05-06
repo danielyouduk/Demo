@@ -15,7 +15,7 @@ public class AccountProfile : Profile
         
         #region Query Mappings
 
-        CreateMap<AccountDto, Account>().ReverseMap();
+        CreateMap<Account, AccountDto>();
 
         #endregion
     }

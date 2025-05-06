@@ -11,13 +11,13 @@ public class DriverProfile : Profile
     {
         #region Command Mappings
         
-        CreateMap<CreateDriverCommand, Driver>().ReverseMap();
+        CreateMap<CreateDriverCommand, Driver>();
         
         #endregion
         
         #region Query Mappings
 
-        CreateMap<DriverDto, Driver>().ReverseMap();
+        CreateMap<Driver, DriverDto>();
 
         #endregion
     }

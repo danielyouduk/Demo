@@ -15,7 +15,7 @@ public class VehicleProfile : Profile
         
         #region Query Mappings
 
-        CreateMap<VehicleDto, Vehicle>().ReverseMap();
+        CreateMap<Vehicle, VehicleDto>();
 
         #endregion
     }
