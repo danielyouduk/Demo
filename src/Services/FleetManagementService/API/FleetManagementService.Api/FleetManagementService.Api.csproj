@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MassTransit.Azure.ServiceBus.Core" Version="8.4.0" />
+      <PackageReference Include="MediatR" Version="12.5.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\Shared\Services.Core\Services.Core.csproj" />
+      <ProjectReference Include="..\..\Core\FleetManagementService.Application\FleetManagementService.Application.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\FleetManagementService.Persistence\FleetManagementService.Persistence.csproj" />
+    </ItemGroup>
+
+</Project>
