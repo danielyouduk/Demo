@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Shared\Services.Core\Services.Core.csproj" />
+      <ProjectReference Include="..\..\..\..\Shared\Services.Core\Services.Core.csproj" />
       <ProjectReference Include="..\DriverService.Domain\DriverService.Domain.csproj" />
     </ItemGroup>
 
