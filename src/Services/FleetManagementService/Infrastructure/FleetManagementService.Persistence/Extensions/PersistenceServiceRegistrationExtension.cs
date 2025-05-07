@@ -1,4 +1,6 @@
 using FleetManagementService.Application.Contracts.Persistence;
+using FleetManagementService.Application.Contracts.Persistence.Common;
+using FleetManagementService.Persistence.Common;
 using FleetManagementService.Persistence.DatabaseContext;
 using FleetManagementService.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +19,7 @@ public static class PersistenceServiceRegistrationExtension
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
         });
 
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IVehicleRepository, VehicleRepository>();
         services.AddScoped<IDriverRepository, DriverRepository>();

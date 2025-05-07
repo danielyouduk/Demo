@@ -7,4 +7,7 @@ namespace FleetManagementService.Application.Features.Account.Commands.CreateAcc
 /// <summary>
 /// Represents a command for creating an account.
 /// </summary>
-public record CreateAccountCommand(Guid Id) : IRequest<ServiceResponse<AccountDto>>;
+public record CreateAccountCommand(
+    string CompanyName,
+    string CompanyVatNumber,
+    Guid? BillingAddressId) : IRequest<ServiceResponse<AccountDto>>;

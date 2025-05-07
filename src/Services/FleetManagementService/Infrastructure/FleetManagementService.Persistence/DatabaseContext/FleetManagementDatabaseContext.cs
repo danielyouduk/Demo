@@ -1,6 +1,7 @@
 using FleetManagementService.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Services.Core.DatabaseContext;
+using Services.Core.Entities;
 
 namespace FleetManagementService.Persistence.DatabaseContext;
 
@@ -16,5 +17,28 @@ public class FleetManagementDatabaseContext(DbContextOptions<FleetManagementData
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(FleetManagementDatabaseContext).Assembly);
+    }
+    
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        var timestamp = DateTime.UtcNow;
+
+        foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.CreatedAt = timestamp;
+                    entry.Entity.UpdatedAt = timestamp;
+                    break;
+                
+                case EntityState.Modified:
+                    entry.Entity.UpdatedAt = timestamp;
+                    entry.Property(x => x.CreatedAt).IsModified = false;
+                    break;
+            }
+        }
+        
+        return base.SaveChangesAsync(cancellationToken);
     }
 }

@@ -1,4 +1,5 @@
 using AutoMapper;
+using FleetManagementService.Application.Features.Account.Commands.CreateAccount;
 using FleetManagementService.Application.Features.Account.Shared;
 using FleetManagementService.Domain.Entities;
 
@@ -10,6 +11,7 @@ public class AccountProfile : Profile
     {
         #region Command Mappings
         
+        CreateMap<CreateAccountCommand, Account>();
         
         #endregion
         
