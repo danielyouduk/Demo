@@ -1,5 +1,5 @@
-using AutoMapper;
 using FleetManagementService.Application.Contracts.Persistence;
+using FleetManagementService.Application.Contracts.Persistence.Common;
 using MassTransit;
 using MediatR;
 using Services.Core.Events.DriverEvents;
@@ -8,21 +8,43 @@ using Services.Core.Models.Service;
 namespace FleetManagementService.Application.Features.Driver.Commands.CreateDriver;
 
 public class CreateDriverCommandHandler(
-    IMapper mapper,
+    CreateDriverCommandValidator validator,
     IDriverRepository driverCommandRepository,
+    IUnitOfWork unitOfWork,
     IPublishEndpoint publishEndpoint) : IRequestHandler<CreateDriverCommand, ServiceResponse<Guid>>
 {
     public async Task<ServiceResponse<Guid>> Handle(CreateDriverCommand request, CancellationToken cancellationToken)
     {
-        var driver = await driverCommandRepository.CreateDriver(mapper.Map<Domain.Entities.Driver>(request));
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
-        await publishEndpoint.Publish(new DriverCreated(driver.Id, driver.FirstName, driver.LastName, driver.CreatedAt), cancellationToken);
-        
-        return new ServiceResponse<Guid>
+        if (!validationResult.IsValid)
+            return new ServiceResponse<Guid>
+            {
+                Success = false,
+                Message = validationResult.Errors.First().ErrorMessage
+            };
+
+        try
         {
-            Data = driver.Id,
-            Success = true,
-            Message = "Successfully created driver."
-        };
+            var driver = await driverCommandRepository.CreateAsync(request);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+            
+            await publishEndpoint.Publish(new DriverCreated(driver.Id, driver.FirstName, driver.LastName, driver.CreatedAt), cancellationToken);
+            
+            return new ServiceResponse<Guid>
+            {
+                Data = driver.Id,
+                Success = true,
+                Message = $"Successfully created driver {request.FirstName} {request.LastName}."
+            };
+        }
+        catch (Exception e)
+        {
+            return new ServiceResponse<Guid>
+            {
+                Success = false,
+                Message = $"An error occurred while creating the driver {request.FirstName} {request.LastName}."
+            };
+        }
     }
 }

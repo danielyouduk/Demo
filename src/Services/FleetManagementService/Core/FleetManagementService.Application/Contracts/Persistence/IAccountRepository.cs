@@ -17,4 +17,6 @@ public interface IAccountRepository
     Task UpdateAsync(UpdateAccountCommand account);
     
     Task AddAccountUser(Guid accountId, Guid userId);
+    
+    Task<bool> ExistsAsync(Guid id);
 }

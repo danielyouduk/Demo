@@ -18,20 +18,24 @@ builder.Services.AddMassTransit(config =>
 
     config.UsingAzureServiceBus((context, cfg) =>
     {
-        cfg.Host(builder.Configuration["Configuration:Azure:ServiceBus:ConnectionString"]);
-        cfg.ReceiveEndpoint("driver-created-search-queue", e =>
-        {
-            e.ConfigureConsumer<DriverCreatedConsumer>(context);
-        });
+        cfg.Host(builder.Configuration["Azure:ServiceBus:ConnectionString"]);
+
+        cfg.SubscriptionEndpoint(
+            subscriptionName: "fleet-management-driver-created-search",
+            topicPath:"fleet-management-driver-created", 
+            configure: e =>
+            {
+                e.ConfigureConsumer<DriverCreatedConsumer>(context);
+            });
     });
 });
 
 builder.Services.AddSingleton(s =>
 {
     return new SearchClient(
-        new Uri(builder.Configuration["Configuration:Azure:AzureSearch:Endpoint"]),
-        builder.Configuration["Configuration:Azure:AzureSearch:IndexName"],
-        new Azure.AzureKeyCredential(builder.Configuration["Configuration:Azure:AzureSearch:ApiKey"]));
+        new Uri(builder.Configuration["Azure:AzureSearch:Endpoint"]),
+        builder.Configuration["Azure:AzureSearch:IndexName"],
+        new Azure.AzureKeyCredential(builder.Configuration["Azure:AzureSearch:ApiKey"]));
 });
 
 builder.Services.AddScoped<DriverSearchService>();

@@ -1,5 +1,6 @@
 using AutoMapper;
 using FleetManagementService.Application.Contracts.Persistence;
+using FleetManagementService.Application.Features.Driver.Commands.CreateDriver;
 using FleetManagementService.Application.Features.Driver.Shared;
 using FleetManagementService.Domain.Entities;
 using FleetManagementService.Persistence.DatabaseContext;
@@ -42,12 +43,13 @@ public class DriverRepository(FleetManagementDatabaseContext context, IMapper ma
         return mapper.Map<DriverDto>(driver);
     }
     
-    public async Task<DriverDto> CreateDriver(Driver driver)
+    public async Task<DriverDto> CreateAsync(CreateDriverCommand createDriverCommand)
     {
-        await context.AddAsync(driver);
-        await context.SaveChangesAsync();
-
-        return mapper.Map<DriverDto>(driver);
+        var entity = mapper.Map<Driver>(createDriverCommand);
+        
+        await context.AddAsync(entity);
+        
+        return mapper.Map<DriverDto>(entity);
     }
 
     public Task UpdateDriver(object driver)

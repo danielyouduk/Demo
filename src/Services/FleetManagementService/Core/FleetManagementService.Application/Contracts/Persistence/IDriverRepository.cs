@@ -1,3 +1,4 @@
+using FleetManagementService.Application.Features.Driver.Commands.CreateDriver;
 using FleetManagementService.Application.Features.Driver.Shared;
 using FleetManagementService.Domain.Entities;
 using Services.Core.Models;
@@ -10,7 +11,7 @@ public interface IDriverRepository
     
     Task<DriverDto> GetDriverByIdAsync(Guid id);
     
-    Task<DriverDto> CreateDriver(Driver driver);
+    Task<DriverDto> CreateAsync(CreateDriverCommand driver);
     
     Task UpdateDriver(object driver);
 }

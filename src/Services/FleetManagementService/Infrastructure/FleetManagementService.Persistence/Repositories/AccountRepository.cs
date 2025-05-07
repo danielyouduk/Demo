@@ -62,4 +62,9 @@ public class AccountRepository(FleetManagementDatabaseContext context, IMapper m
     {
         throw new NotImplementedException();
     }
+
+    public async Task<bool> ExistsAsync(Guid id)
+    {
+        return await context.Accounts.AnyAsync(account => account.Id == id);
+    }
 }
