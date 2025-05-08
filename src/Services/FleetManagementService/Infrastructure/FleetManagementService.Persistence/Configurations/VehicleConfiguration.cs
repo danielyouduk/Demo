@@ -1,3 +1,4 @@
+using Bogus;
 using FleetManagementService.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -36,22 +37,39 @@ public class VehicleConfiguration : BaseConfiguration<Vehicle>
 
     protected override void ConfigureSeedData(EntityTypeBuilder<Vehicle> builder)
     {
-        builder.HasData(
-            new Vehicle
-            {
-                Id = new Guid("C9095989-FA9F-41E9-95A2-FD7BD0C30675"),
-                AccountId = new Guid("3F21CAE9-E777-425A-8BA5-DC15782A232D"),
-                RegistrationNumber = "MW63 LRN",
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            },
-            new Vehicle
-            {
-                Id = new Guid("D9B0CA63-A27C-4F56-8DD2-A8844C36E1C8"),
-                AccountId = new Guid("0C49E8CE-7884-4665-8591-CB8CA9AFAF34"),
-                RegistrationNumber = "Y13 UDY",
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            });
+        var accountIds = new[] 
+        {
+            new Guid("3F21CAE9-E777-425A-8BA5-DC15782A232D"),
+            new Guid("0C49E8CE-7884-4665-8591-CB8CA9AFAF34")
+        };
+
+        var faker = new Faker<Vehicle>()
+            .RuleFor(v => v.Id, f => Guid.NewGuid())
+            .RuleFor(v => v.AccountId, (f, v) => accountIds[f.IndexFaker % accountIds.Length])
+            .RuleFor(v => v.RegistrationNumber, f => f.Random.Replace("?? ## ???"))
+            .RuleFor(v => v.CreatedAt, DateTime.UtcNow)
+            .RuleFor(v => v.UpdatedAt, DateTime.UtcNow);
+
+        var vehicles = faker.Generate(40);
+        builder.HasData(vehicles);
+
+        
+        // builder.HasData(
+        //     new Vehicle
+        //     {
+        //         Id = new Guid("C9095989-FA9F-41E9-95A2-FD7BD0C30675"),
+        //         AccountId = new Guid("3F21CAE9-E777-425A-8BA5-DC15782A232D"),
+        //         RegistrationNumber = "MW63 LRN",
+        //         CreatedAt = DateTime.UtcNow,
+        //         UpdatedAt = DateTime.UtcNow
+        //     },
+        //     new Vehicle
+        //     {
+        //         Id = new Guid("D9B0CA63-A27C-4F56-8DD2-A8844C36E1C8"),
+        //         AccountId = new Guid("0C49E8CE-7884-4665-8591-CB8CA9AFAF34"),
+        //         RegistrationNumber = "Y13 UDY",
+        //         CreatedAt = DateTime.UtcNow,
+        //         UpdatedAt = DateTime.UtcNow
+        //     });
     }
 }
