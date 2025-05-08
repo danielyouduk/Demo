@@ -27,15 +27,23 @@ public class CreateDriverCommandHandler(
         try
         {
             var driver = await driverCommandRepository.CreateAsync(request);
+            
             await unitOfWork.SaveChangesAsync(cancellationToken);
             
-            await publishEndpoint.Publish(new DriverCreated(driver.Id, driver.FirstName, driver.LastName, driver.CreatedAt), cancellationToken);
+            await publishEndpoint.Publish(new DriverCreated(
+                driver.Id,
+                driver.AccountId,
+                driver.FirstName,
+                driver.LastName, 
+                $"/api/drivers/{driver.Id}",
+                driver.CreatedAt,
+                driver.UpdatedAt), cancellationToken);
             
             return new ServiceResponse<Guid>
             {
                 Data = driver.Id,
                 Success = true,
-                Message = $"Successfully created driver {request.FirstName} {request.LastName}."
+                Message = $"Successfully created driver {driver.FirstName} {driver.LastName}."
             };
         }
         catch (Exception e)

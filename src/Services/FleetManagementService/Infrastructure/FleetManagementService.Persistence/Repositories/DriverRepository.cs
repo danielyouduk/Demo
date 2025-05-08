@@ -47,6 +47,10 @@ public class DriverRepository(FleetManagementDatabaseContext context, IMapper ma
     {
         var entity = mapper.Map<Driver>(createDriverCommand);
         
+        var now = DateTime.UtcNow;
+        entity.CreatedAt = now;
+        entity.UpdatedAt = now;
+        
         await context.AddAsync(entity);
         
         return mapper.Map<DriverDto>(entity);

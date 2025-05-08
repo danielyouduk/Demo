@@ -1,20 +1,52 @@
 using Microsoft.AspNetCore.Mvc;
-using SearchService.Api.Services;
+using MongoDB.Entities;
+using SearchService.Api.Models;
+using SearchService.Api.RequestHelpers;
 
 namespace SearchService.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class SearchController(DriverSearchService searchService) : ControllerBase
+[Route("api/search")]
+public class SearchController : ControllerBase
 {
-    [HttpGet("search")]
-    public async Task<IActionResult> SearchDrivers([FromQuery] string query)
+    [HttpGet]
+    public async Task<ActionResult<List<Item>>> SearchItems(
+        [FromQuery] SearchParams searchParams)
     {
-        var searchResults = await searchService.SearchDriversAsync(query);
+        var query = DB.PagedSearch<Item, Item>();
 
-        var results = searchResults.GetResults().Select(r => r.Document);
+        if (!string.IsNullOrWhiteSpace(searchParams.SearchTerm))
+        {
+            query.Match(Search.Full, searchParams.SearchTerm).SortByTextScore();
+        }
 
-        return Ok(results);
+        query = searchParams.OrderBy switch
+        {
+            "name" => query.Sort(x => x.Ascending(i => i.Name)),
+            "type" => query.Sort(x => x.Ascending(i => i.Type)),
+            _ => query.Sort(x => x.Descending(i => i.UpdatedAt))
+        };
+
+        if (!string.IsNullOrEmpty(searchParams.Name))
+        {
+            query.Match(x => x.Name.Contains(searchParams.Name));
+        }
+
+        if (!string.IsNullOrEmpty(searchParams.Type))
+        {
+            query.Match(x => x.Type.Contains(searchParams.Type));
+        }
+        
+        query.PageNumber(searchParams.PageNumber);
+        query.PageSize(searchParams.PageSize);
+
+        var results = await query.ExecuteAsync();
+        
+        return Ok(new
+        {
+            results = results.Results,
+            pageCount = results.PageCount,
+            totalCount = results.TotalCount
+        });
     }
-
 }

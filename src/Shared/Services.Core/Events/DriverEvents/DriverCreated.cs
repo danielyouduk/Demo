@@ -1,3 +1,10 @@
 namespace Services.Core.Events.DriverEvents;
 
-public record DriverCreated(Guid DriverId, string FirstName, string LastName, DateTime CreatedAt);
+public record DriverCreated(
+    Guid DriverId,
+    Guid AccountId,
+    string FirstName,
+    string LastName,
+    string ResourceUrl,
+    DateTime CreatedAt,
+    DateTime UpdatedAt);

@@ -28,13 +28,17 @@ public class FleetManagementDatabaseContext(DbContextOptions<FleetManagementData
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedAt = timestamp;
-                    entry.Entity.UpdatedAt = timestamp;
+                    
+                    if (entry.Entity.CreatedAt == default) entry.Entity.CreatedAt = timestamp;
+                    if (entry.Entity.UpdatedAt == default) entry.Entity.UpdatedAt = timestamp;
+                    
                     break;
                 
                 case EntityState.Modified:
+                    
                     entry.Entity.UpdatedAt = timestamp;
                     entry.Property(x => x.CreatedAt).IsModified = false;
+                    
                     break;
             }
         }
