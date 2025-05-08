@@ -20,7 +20,8 @@ public class DriverCreatedConsumer : IConsumer<DriverCreated>
                 AccountId = context.Message.AccountId.ToString(),
                 CreatedAt = context.Message.CreatedAt,
                 UpdatedAt = context.Message.CreatedAt,
-                ResourceUrl = context.Message.ResourceUrl
+                ResourceUrl = context.Message.ResourceUrl,
+                IsActive = context.Message.IsActive
             };
 
             await item.SaveAsync();

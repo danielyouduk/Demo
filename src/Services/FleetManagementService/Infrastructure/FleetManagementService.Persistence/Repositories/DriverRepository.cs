@@ -50,6 +50,7 @@ public class DriverRepository(FleetManagementDatabaseContext context, IMapper ma
         var now = DateTime.UtcNow;
         entity.CreatedAt = now;
         entity.UpdatedAt = now;
+        entity.IsActive = true;
         
         await context.AddAsync(entity);
         

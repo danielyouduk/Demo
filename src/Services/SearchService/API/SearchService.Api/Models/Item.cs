@@ -18,6 +18,8 @@ public class Item : Entity
     // e.g. /api/drivers/1234567890
     public required string ResourceUrl { get; set; } 
     
+    public bool IsActive { get; set; }
+    
     // DateTime (Utc)
     public DateTime CreatedAt { get; set; }
     
