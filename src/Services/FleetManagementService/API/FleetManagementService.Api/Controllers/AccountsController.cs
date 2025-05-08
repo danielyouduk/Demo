@@ -3,7 +3,6 @@ using FleetManagementService.Application.Features.Account.Commands.UpdateAccount
 using FleetManagementService.Application.Features.Account.Queries.GetAccount;
 using FleetManagementService.Application.Features.Account.Queries.GetAccounts;
 using FleetManagementService.Application.Features.Account.Shared;
-using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Services.Core.Models;
