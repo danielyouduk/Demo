@@ -1,3 +1,4 @@
+using AutoMapper;
 using FleetManagementService.Application.Contracts.Persistence;
 using FleetManagementService.Application.Contracts.Persistence.Common;
 using MassTransit;
@@ -11,6 +12,7 @@ public class CreateDriverCommandHandler(
     CreateDriverCommandValidator validator,
     IDriverRepository driverCommandRepository,
     IUnitOfWork unitOfWork,
+    IMapper mapper,
     IPublishEndpoint publishEndpoint) : IRequestHandler<CreateDriverCommand, ServiceResponse<Guid>>
 {
     public async Task<ServiceResponse<Guid>> Handle(CreateDriverCommand request, CancellationToken cancellationToken)
@@ -30,14 +32,7 @@ public class CreateDriverCommandHandler(
             
             await unitOfWork.SaveChangesAsync(cancellationToken);
             
-            await publishEndpoint.Publish(new DriverCreated(
-                driver.Id,
-                driver.AccountId,
-                driver.FirstName,
-                driver.LastName, 
-                $"/api/drivers/{driver.Id}",
-                driver.CreatedAt,
-                driver.UpdatedAt), cancellationToken);
+            await publishEndpoint.Publish(mapper.Map<DriverCreated>(driver), cancellationToken);
             
             return new ServiceResponse<Guid>
             {
