@@ -33,18 +33,6 @@ public class AccountConfiguration : BaseConfiguration<Account>
             .HasMaxLength(50);
 
         builder.Property(a => a.BillingAddressId);
-        
-        builder.Property(a => a.NoOfActiveDrivers)
-            .IsRequired();
-        
-        builder.Property(a => a.NoOfActiveVehicles)
-            .IsRequired();
-        
-        builder.Property(a => a.NoOfActiveChecklists)
-            .IsRequired();
-        
-        builder.Property(a => a.NoOfReportsSubmitted)
-            .IsRequired();
     }
 
     protected override void ConfigureRelationships(EntityTypeBuilder<Account> builder)
@@ -69,10 +57,6 @@ public class AccountConfiguration : BaseConfiguration<Account>
                 CompanyName = "Company Name",
                 CompanyVatNumber = "123456789",
                 BillingAddressId = new Guid("63e1389a-571c-491e-9c60-bb98c838d0e2"),
-                NoOfActiveDrivers = 10,
-                NoOfActiveVehicles = 10,
-                NoOfActiveChecklists = 10,
-                NoOfReportsSubmitted = 10,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             });

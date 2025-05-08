@@ -12,14 +12,6 @@ public class Account : BaseEntity
     
     public Guid? BillingAddressId { get; set; }
     
-    public int NoOfActiveDrivers { get; set; }
-    
-    public int NoOfActiveVehicles { get; set; }
-    
-    public int NoOfActiveChecklists { get; set; }
-    
-    public int NoOfReportsSubmitted { get; set; }
-    
     public ICollection<Driver>? Drivers { get; set; }
 
     public ICollection<Vehicle>? Vehicles { get; set; }
