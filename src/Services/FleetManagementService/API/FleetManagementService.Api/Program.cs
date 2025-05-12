@@ -1,3 +1,4 @@
+using FleetManagementService.Application.Consumers.ChecklistEvents;
 using FleetManagementService.Application.Extensions;
 using FleetManagementService.Persistence.Extensions;
 using MassTransit;
@@ -18,6 +19,15 @@ builder.Services.AddMassTransit(config =>
 
         cfg.Message<DriverCreated>(x =>
             x.SetEntityName("fleet-management-driver-created"));
+        
+        cfg.SubscriptionEndpoint(
+            subscriptionName: "checklist-account-updates",
+            topicPath: "checklist-submitted",
+            configure: e =>
+            {
+                e.ConfigureConsumer<ChecklistAccountUpdatesConsumer>(context);
+            });
+
 
     });
 });

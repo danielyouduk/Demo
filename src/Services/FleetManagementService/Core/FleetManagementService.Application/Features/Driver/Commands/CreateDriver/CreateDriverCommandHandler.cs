@@ -41,7 +41,7 @@ public class CreateDriverCommandHandler(
                 Message = $"Successfully created driver {driver.FirstName} {driver.LastName}."
             };
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return new ServiceResponse<Guid>
             {

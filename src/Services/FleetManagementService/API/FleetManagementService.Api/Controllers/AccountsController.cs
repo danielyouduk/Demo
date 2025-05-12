@@ -49,7 +49,7 @@ public class AccountsController(ISender mediator) : ControllerBase
         [FromBody] CreateAccountCommand createAccountCommand)
     {
         var result = await mediator.Send(createAccountCommand);
-        
+
         return CreatedAtAction(nameof(GetAccountById), new { id = result.Data.Id }, result);
     }
     

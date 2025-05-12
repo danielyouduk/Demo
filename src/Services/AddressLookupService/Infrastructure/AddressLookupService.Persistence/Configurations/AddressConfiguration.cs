@@ -21,7 +21,7 @@ public class AddressConfiguration : BaseConfiguration<AddressEntity>
     
     protected override void ConfigureTable(EntityTypeBuilder<AddressEntity> builder)
     {
-        builder.ToTable(TableName);
+        
     }
 
     protected override void ConfigureProperties(EntityTypeBuilder<AddressEntity> builder)

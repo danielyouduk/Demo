@@ -7,7 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="MediatR" Version="12.5.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4"/>
+        <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.50.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\ChecklistService.Application\ChecklistService.Application.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\ChecklistService.Persistence\ChecklistService.Persistence.csproj" />
     </ItemGroup>
 
 </Project>

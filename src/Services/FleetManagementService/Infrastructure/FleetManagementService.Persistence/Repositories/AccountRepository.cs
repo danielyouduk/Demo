@@ -6,6 +6,7 @@ using FleetManagementService.Application.Features.Account.Commands.CreateAccount
 using FleetManagementService.Application.Features.Account.Commands.UpdateAccount;
 using FleetManagementService.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Services.Core.Events.ChecklistsEvents;
 using Services.Core.Helpers;
 using Services.Core.Models;
 
@@ -66,5 +67,15 @@ public class AccountRepository(FleetManagementDatabaseContext context, IMapper m
     public async Task<bool> ExistsAsync(Guid id)
     {
         return await context.Accounts.AnyAsync(account => account.Id == id);
+    }
+
+    public Task IncrementChecklistCount(ChecklistSubmitted checklistSubmitted)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateLastChecklistSubmission(Guid accountId, DateTime lastChecklistSubmission)
+    {
+        throw new NotImplementedException();
     }
 }

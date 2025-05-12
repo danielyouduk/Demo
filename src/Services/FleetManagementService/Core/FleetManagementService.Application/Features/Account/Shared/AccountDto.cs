@@ -16,9 +16,11 @@ public class AccountDto
     
     public int NoOfActiveChecklists { get; set; }
     
-    public int NoOfReportsSubmitted { get; set; }
+    public int NoOfChecklistsSubmitted { get; set; }
     
     public bool IsActive { get; init; }
+    
+    public DateTime? LastChecklistSubmittedAt { get; set; }
     
     public DateTime CreatedAt { get; set; }
     

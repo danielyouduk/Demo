@@ -2,6 +2,7 @@ using FleetManagementService.Application.Features.Account.Commands.CreateAccount
 using FleetManagementService.Application.Features.Account.Commands.UpdateAccount;
 using FleetManagementService.Application.Features.Account.Shared;
 using FleetManagementService.Domain.Entities;
+using Services.Core.Events.ChecklistsEvents;
 using Services.Core.Models;
 
 namespace FleetManagementService.Application.Contracts.Persistence;
@@ -19,4 +20,8 @@ public interface IAccountRepository
     Task AddAccountUser(Guid accountId, Guid userId);
     
     Task<bool> ExistsAsync(Guid id);
+    
+    Task IncrementChecklistCount(ChecklistSubmitted checklistSubmitted);
+
+    Task UpdateLastChecklistSubmission(Guid accountId, DateTime lastChecklistSubmission);
 }
