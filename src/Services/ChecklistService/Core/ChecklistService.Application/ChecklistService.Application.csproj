@@ -13,6 +13,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\..\Shared\Services.Core\Services.Core.csproj" />
       <ProjectReference Include="..\..\..\FleetManagementService\Core\FleetManagementService.Application\FleetManagementService.Application.csproj" />
+      <ProjectReference Include="..\ChecklistService.Domain\ChecklistService.Domain.csproj" />
     </ItemGroup>
 
 </Project>

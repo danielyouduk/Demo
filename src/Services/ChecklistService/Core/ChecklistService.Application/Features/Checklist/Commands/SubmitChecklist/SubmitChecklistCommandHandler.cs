@@ -11,12 +11,17 @@ public class SubmitChecklistCommandHandler(IChecklistRepository repository, IPub
 {
     public async Task<ServiceResponse<Unit>> Handle(SubmitChecklistCommand request, CancellationToken cancellationToken)
     {
+        var submittedAt = DateTime.UtcNow;
+        
+        request.SubmittedAt = submittedAt;
+        
         await repository.SubmitChecklistAsync(request);
 
         await publishEndpoint.Publish(new ChecklistSubmitted
         {
-            ChecklistId = request.ChecklistId,
-            AccountId = request.AccountId
+            ChecklistId = request.id,
+            AccountId = request.AccountId,
+            SubmittedAt = request.SubmittedAt
         }, cancellationToken);
 
         return new ServiceResponse<Unit>
