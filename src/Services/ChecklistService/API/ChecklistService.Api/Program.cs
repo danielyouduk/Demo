@@ -2,7 +2,7 @@ using ChecklistService.Application.Extensions;
 using ChecklistService.Persistence.Extensions;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Options;
-using Settings = ChecklistService.Api.Settings;
+using Configuration = ChecklistService.Application.Settings.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +15,11 @@ builder.Services.AddPersistenceServices(builder.Configuration);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddOptions<Settings.Configuration>().Bind(builder.Configuration.GetSection(nameof(Settings.Configuration)));
+builder.Services.AddOptions<Configuration>().Bind(builder.Configuration.GetSection(nameof(Configuration)));
 
 builder.Services.AddSingleton<CosmosClient>((serviceProvider) =>
 {
-    var configurationOptions = serviceProvider.GetRequiredService<IOptions<Settings.Configuration>>();
+    var configurationOptions = serviceProvider.GetRequiredService<IOptions<Configuration>>();
     var configuration = configurationOptions.Value;
 
     CosmosClient client = new(

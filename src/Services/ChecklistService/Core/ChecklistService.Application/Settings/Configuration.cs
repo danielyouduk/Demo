@@ -1,4 +1,4 @@
-namespace ChecklistService.Api.Settings;
+namespace ChecklistService.Application.Settings;
 
 public record Configuration
 {

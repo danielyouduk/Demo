@@ -3,6 +3,6 @@ using Services.Core.Models.Service;
 
 namespace ChecklistService.Application.Features.Checklist.Commands.SubmitChecklist;
 
-public class SubmitChecklistCommand(
+public record SubmitChecklistCommand(
     Guid ChecklistId,
     Guid AccountId) : IRequest<ServiceResponse<Unit>>;
