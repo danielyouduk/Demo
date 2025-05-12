@@ -6,7 +6,7 @@ public class ChecklistDto
     
     public Guid AccountId { get; set; }
     
-    public string? Name { get; set; }
+    public string? Title { get; set; }
     
     public bool IsSubmitted { get; set; }
     

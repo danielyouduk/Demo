@@ -11,4 +11,8 @@ public record CreateChecklistCommand : IRequest<ServiceResponse<ChecklistDto>>
     public Guid AccountId { get; init; }
     
     public string Title { get; init; }
+    
+    public DateTime CreatedAt { get; set; }
+    
+    public DateTime UpdatedAt { get; set; }
 }

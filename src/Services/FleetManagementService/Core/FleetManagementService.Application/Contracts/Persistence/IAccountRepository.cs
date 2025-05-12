@@ -21,7 +21,9 @@ public interface IAccountRepository
     
     Task<bool> ExistsAsync(Guid id);
     
-    Task IncrementChecklistCount(ChecklistSubmitted checklistSubmitted);
+    Task IncrementChecklistCreatedCount(ChecklistCreated checklistCreated);
+    
+    Task IncrementChecklistSubmittedCount(ChecklistSubmitted checklistSubmitted);
 
     Task UpdateLastChecklistSubmission(Guid accountId, DateTime lastChecklistSubmission);
 }

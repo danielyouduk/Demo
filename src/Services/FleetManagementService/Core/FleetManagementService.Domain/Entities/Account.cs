@@ -13,6 +13,10 @@ public class Account : BaseEntity
     
     public Guid? BillingAddressId { get; set; }
     
+    public int NoOfChecklists { get; set; }
+    
+    public DateTime? LastChecklistCreatedAt { get; set; }
+    
     public int NoOfChecklistsSubmitted { get; set; }
     
     public DateTime? LastChecklistSubmittedAt { get; set; }

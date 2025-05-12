@@ -69,13 +69,36 @@ public class AccountRepository(FleetManagementDatabaseContext context, IMapper m
         return await context.Accounts.AnyAsync(account => account.Id == id);
     }
 
-    public Task IncrementChecklistCount(ChecklistSubmitted checklistSubmitted)
+    public async Task IncrementChecklistCreatedCount(ChecklistCreated checklistCreated)
     {
-        throw new NotImplementedException();
+        var account = await context.Accounts.FirstOrDefaultAsync(account => account.Id == checklistCreated.AccountId);
+
+        if (account != null)
+        {
+            account.LastChecklistCreatedAt = checklistCreated.CreatedAt;
+            account.NoOfChecklists++;
+            
+            context.Entry(account).State = EntityState.Modified;
+            context.Entry(account).Property(p => p.CreatedAt).IsModified = false;
+        }
     }
 
-    public Task UpdateLastChecklistSubmission(Guid accountId, DateTime lastChecklistSubmission)
+    public async Task IncrementChecklistSubmittedCount(ChecklistSubmitted checklistSubmitted)
     {
-        throw new NotImplementedException();
+        var account = await context.Accounts.FirstOrDefaultAsync(account => account.Id == checklistSubmitted.AccountId);
+
+        if (account != null)
+        {
+            account.LastChecklistSubmittedAt = checklistSubmitted.SubmittedAt;
+            account.NoOfChecklistsSubmitted++;
+            
+            context.Entry(account).State = EntityState.Modified;
+            context.Entry(account).Property(p => p.CreatedAt).IsModified = false;
+        }
+    }
+
+    public async Task UpdateLastChecklistSubmission(Guid accountId, DateTime lastChecklistSubmission)
+    {
+        var account = await context.Accounts.FirstOrDefaultAsync(account => account.Id == accountId);
     }
 }
