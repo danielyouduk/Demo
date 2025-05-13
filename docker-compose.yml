@@ -31,14 +31,13 @@ services:
       - NUGET_FALLBACK_PACKAGES=/root/.nuget/fallbackpackages
       - VSTEST_HOST_DEBUG=1
       - DOTNET_RUNNING_IN_CONTAINER=true
+      - ASPNETCORE_Kestrel__Endpoints__Http__Url=http://+:5001
       # DEBUG <<<
     ports:
       - 5001:5001
     volumes:
       # DEBUG >>>
       - ~/.nuget/packages:/root/.nuget/packages:ro
-      - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
-      - ~/.aspnet/https:/root/.aspnet/https:ro
       - .:/src
       # DEBUG <<<
     depends_on:
