@@ -4,6 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,6 +21,12 @@
       <ProjectReference Include="..\..\..\..\Shared\Services.Core\Services.Core.csproj" />
       <ProjectReference Include="..\..\Core\FleetManagementService.Application\FleetManagementService.Application.csproj" />
       <ProjectReference Include="..\..\Infrastructure\FleetManagementService.Persistence\FleetManagementService.Persistence.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

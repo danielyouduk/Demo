@@ -1,22 +1,51 @@
+using DocumentProcessor.Settings;
+using MassTransit;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using QuestPDF.Fluent;
+using Services.Core.Events.ChecklistsEvents;
 
 namespace DocumentProcessor.Functions;
 
-public class ChecklistPdfGeneratorFunction
+public class ChecklistPdfGeneratorFunction(
+    CosmosClient cosmosClient,
+    IConsumer<ChecklistSubmitted> _consumer,
+    IOptions<Configuration> configuration)
 {
-    private readonly IPdfGenerator _pdfGenerator;
     
     [Function(nameof(ChecklistPdfGeneratorFunction))]
     public async Task Run(
         [ServiceBusTrigger(
-            "checklist-submitted", // topic name
-            "pdf-generator", // subscription name
-            Connection = "ServiceBusConnection")] ChecklistSubmitted message,
+            "checklist-submitted",
+            "checklist-submitted",
+            Connection = "Configuration:AzureServiceBus:ConnectionString")] ChecklistSubmitted message,
         FunctionContext context)
-
     {
-        
+        try
+        {
+            
+            var container = cosmosClient.GetContainer(
+                configuration.Value.AzureCosmosDb.DatabaseName,
+                configuration.Value.AzureCosmosDb.ContainerName);
+            
+            var checklist = await container.ReadItemAsync<Checklist>(
+                id: message.ChecklistId.ToString(),
+                partitionKey: new PartitionKey(message.AccountId.ToString())
+            );
+            
+            var document = new ChecklistDocument(checklist);
+            
+            document.GeneratePdfAndShow();
+            
+            
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            throw;
+        }
         
         
         // foreach (var document in documents)
@@ -52,29 +81,6 @@ public class ChecklistPdfGeneratorFunction
         //         }
         //     }
         // }
-    }
-
-    
-    private async Task<byte[]> GeneratePdf(Document checklistDocument)
-    {
-        using var ms = new MemoryStream();
-        QuestPDF.Fluent.Document
-            .Create(container =>
-            {
-                container.Page(page =>
-                {
-                    page.Header().Text($"Checklist: {checklistDocument.Id}");
-                    page.Content().Component(new ChecklistComponent(checklistDocument));
-                    page.Footer().Text(text =>
-                    {
-                        text.Span("Generated: ");
-                        text.Span(DateTime.Now.ToString("g"));
-                    });
-                });
-            })
-            .GeneratePdf(ms);
-    
-        return ms.ToArray();
     }
 
 }
