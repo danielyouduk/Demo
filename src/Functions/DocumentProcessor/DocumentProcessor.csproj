@@ -8,6 +8,7 @@
     </PropertyGroup>
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+        <PackageReference Include="Azure.Storage.Blobs" Version="12.24.0" />
         <PackageReference Include="MassTransit.Azure.ServiceBus.Core" Version="8.4.0" />
         <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.50.0" />
         <!-- Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4. -->

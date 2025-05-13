@@ -1,11 +1,13 @@
-using DocumentProcessor;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Azure.Storage.Blobs;
 using MassTransit;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Services.Core.Events.ChecklistsEvents;
+using QuestPDF.Infrastructure;
 using Configuration = DocumentProcessor.Settings.Configuration;
 
 var builder = FunctionsApplication.CreateBuilder(args);
@@ -23,22 +25,34 @@ builder.Services.AddSingleton<CosmosClient>((serviceProvider) =>
     return client;
 });
 
+builder.Services.AddSingleton<BlobServiceClient>(serviceProvider =>
+{
+    var configurationOptions = serviceProvider.GetRequiredService<IOptions<Configuration>>();
+    var configuration = configurationOptions.Value;
+    return new BlobServiceClient(configuration.BlobStorageSettings.ConnectionString);
+});
+
 builder.Services.AddMassTransit(config =>
 {
     config.UsingAzureServiceBus((context, cfg) =>
     {
-        cfg.Host(builder.Configuration["Configuration:AzureServiceBus:ConnectionString"]);
-
-        // Configure the consumer endpoint
-        cfg.ReceiveEndpoint("pdf-generator", e =>
+        cfg.Host(builder.Configuration["ServiceBusConnection"]);
+        
+        cfg.ConfigureJsonSerializerOptions(options =>
         {
-            e.Consumer<ChecklistSubmittedConsumer>();
+            options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            return options;
         });
-
-        // Configure message topology
-        cfg.Message<ChecklistSubmitted>(x => 
-            x.SetEntityName("checklist-submitted"));
     });
+});
+QuestPDF.Settings.License = LicenseType.Community;
+
+builder.Services.Configure<JsonSerializerOptions>(options =>
+{
+    options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    options.Converters.Add(new JsonStringEnumConverter());
 });
 
 

@@ -1,9 +1,10 @@
 using DocumentProcessor.Settings;
-using MassTransit;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+using System.Text.Json;
+using Azure.Storage.Blobs;
+using DocumentProcessor.Models;
 using QuestPDF.Fluent;
 using Services.Core.Events.ChecklistsEvents;
 
@@ -11,21 +12,22 @@ namespace DocumentProcessor.Functions;
 
 public class ChecklistPdfGeneratorFunction(
     CosmosClient cosmosClient,
-    IConsumer<ChecklistSubmitted> _consumer,
-    IOptions<Configuration> configuration)
+    IOptions<Configuration> configuration,
+    BlobServiceClient blobServiceClient)
 {
-    
     [Function(nameof(ChecklistPdfGeneratorFunction))]
     public async Task Run(
         [ServiceBusTrigger(
             "checklist-submitted",
-            "checklist-submitted",
-            Connection = "Configuration:AzureServiceBus:ConnectionString")] ChecklistSubmitted message,
+            "checklist-submitted-processor",
+            Connection = "ServiceBusConnection")] string messageJson,
         FunctionContext context)
     {
         try
         {
-            
+            var envelope = JsonSerializer.Deserialize<MassTransitEnvelope<ChecklistSubmitted>>(messageJson);
+            var message = envelope.Message;
+
             var container = cosmosClient.GetContainer(
                 configuration.Value.AzureCosmosDb.DatabaseName,
                 configuration.Value.AzureCosmosDb.ContainerName);
@@ -36,53 +38,28 @@ public class ChecklistPdfGeneratorFunction(
             );
             
             var document = new ChecklistDocument(checklist);
+            var generatedPdf = document.GeneratePdf();
+
+            // Get blob container
+            var containerClient = blobServiceClient.GetBlobContainerClient("checklist-pdfs");
+            await containerClient.CreateIfNotExistsAsync();
             
-            document.GeneratePdfAndShow();
+            // Generate unique blob name
+            string blobName = $"checklist-{message.ChecklistId}-{DateTime.UtcNow:yyyyMMddHHmmss}.pdf";
             
-            
+            // Upload to blob storage
+            var blobClient = containerClient.GetBlobClient(blobName);
+            using (var ms = new MemoryStream(generatedPdf))
+            {
+                await blobClient.UploadAsync(ms, overwrite: true);
+            }
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
             throw;
         }
-        
-        
-        // foreach (var document in documents)
-        // {
-        //     // Only process if the document is marked as submitted
-        //     if (document.GetPropertyValue<bool>("isSubmitted"))
-        //     {
-        //         try
-        //         {
-        //             // Convert checklist to PDF
-        //             byte[] pdfContent = await GeneratePdf(document);
-        //
-        //             // Get blob container
-        //             var containerClient = _blobServiceClient.GetBlobContainerClient("checklist-pdfs");
-        //             await containerClient.CreateIfNotExistsAsync();
-        //
-        //             // Generate unique blob name
-        //             string blobName = $"checklist-{document.Id}-{DateTime.UtcNow:yyyyMMddHHmmss}.pdf";
-        //             
-        //             // Upload to blob storage
-        //             var blobClient = containerClient.GetBlobClient(blobName);
-        //             using (var ms = new MemoryStream(pdfContent))
-        //             {
-        //                 await blobClient.UploadAsync(ms, overwrite: true);
-        //             }
-        //
-        //             _logger.LogInformation($"PDF generated and stored for checklist {document.Id}");
-        //         }
-        //         catch (Exception ex)
-        //         {
-        //             _logger.LogError(ex, $"Error processing checklist {document.Id}");
-        //             throw;
-        //         }
-        //     }
-        // }
     }
-
 }
 
 

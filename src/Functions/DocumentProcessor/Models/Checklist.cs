@@ -1,4 +1,4 @@
-namespace DocumentProcessor;
+namespace DocumentProcessor.Models;
 
 public class Checklist
 {

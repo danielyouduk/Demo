@@ -2,7 +2,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
-namespace DocumentProcessor;
+namespace DocumentProcessor.Models;
 
 public class ChecklistDocument(Checklist model) : IDocument
 {
@@ -37,9 +37,21 @@ public class ChecklistDocument(Checklist model) : IDocument
             row.RelativeItem().Column(column =>
             {
                 column.Item()
-                    .Text($"Invoice #{model.id}")
+                    .Text("Checklist Created")
                     .FontSize(20).SemiBold().FontColor(Colors.Blue.Medium);
-
+                
+                column.Item().Text(text =>
+                {
+                    text.Span("Checklist ID: ").SemiBold();
+                    text.Span($"{model.id}");
+                });
+                
+                column.Item().Text(text =>
+                {
+                    text.Span("Account ID: ").SemiBold();
+                    text.Span($"{model.AccountId}");
+                });
+                
                 column.Item().Text(text =>
                 {
                     text.Span("Created date: ").SemiBold();
