@@ -71,15 +71,28 @@ public class AccountRepository(FleetManagementDatabaseContext context, IMapper m
 
     public async Task IncrementChecklistCreatedCount(ChecklistCreated checklistCreated)
     {
-        var account = await context.Accounts.FirstOrDefaultAsync(account => account.Id == checklistCreated.AccountId);
-
-        if (account != null)
+        try
         {
-            account.LastChecklistCreatedAt = checklistCreated.CreatedAt;
-            account.NoOfChecklists++;
+            var account = await context.Accounts.FirstOrDefaultAsync(account => account.Id == checklistCreated.AccountId);
+
+            if (account != null)
+            {
+                account.LastChecklistCreatedAt = checklistCreated.CreatedAt;
+                account.NoOfChecklists++;
             
-            context.Entry(account).State = EntityState.Modified;
-            context.Entry(account).Property(p => p.CreatedAt).IsModified = false;
+                context.Entry(account).State = EntityState.Modified;
+                context.Entry(account).Property(p => p.CreatedAt).IsModified = false;
+            }
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            Console.WriteLine(ex);
+            throw;
+        }
+        catch (Exception ex)
+        {
+            // Log the exception
+            throw new Exception("Failed to increment checklist count", ex);
         }
     }
 
