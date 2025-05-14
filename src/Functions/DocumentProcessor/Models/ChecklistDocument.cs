@@ -6,8 +6,6 @@ namespace DocumentProcessor.Models;
 
 public class ChecklistDocument(Checklist model) : IDocument
 {
-    // private Checklist Model { get; } = model;
-
     public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
     public DocumentSettings GetSettings() => DocumentSettings.Default;
 
