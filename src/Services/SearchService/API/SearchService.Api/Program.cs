@@ -1,14 +1,15 @@
 using MassTransit;
+using Microsoft.Extensions.Options;
 using SearchService.Api.Consumers;
 using SearchService.Api.Data;
-using Settings = SearchService.Api.Settings;
+using Configuration = SearchService.Api.Settings.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddOptions<Settings.Configuration>().Bind(
-    builder.Configuration.GetSection(nameof(Settings.Configuration)));
+builder.Services.AddOptions<Configuration>().Bind(
+    builder.Configuration.GetSection(nameof(Configuration)));
 
 builder.Services.AddMassTransit(config =>
 {
@@ -16,8 +17,9 @@ builder.Services.AddMassTransit(config =>
 
     config.UsingAzureServiceBus((context, cfg) =>
     {
-        cfg.Host(builder.Configuration["Azure:ServiceBus:ConnectionString"]);
-
+        var configuration = context.GetRequiredService<IOptions<Configuration>>().Value;
+        
+        cfg.Host(configuration.AzureServiceBusSettings.ConnectionString);
         cfg.SubscriptionEndpoint(
             subscriptionName: "fleet-management-driver-created-search",
             topicPath:"fleet-management-driver-created", 
@@ -32,7 +34,8 @@ var app = builder.Build();
 
 try
 {
-    await DbInitializer.InitializeAsync(app);
+    var configuration = app.Services.GetRequiredService<IOptions<Configuration>>().Value;
+    await DbInitializer.InitializeAsync(app, configuration);
 }
 catch (Exception e)
 {

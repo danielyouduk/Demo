@@ -2,19 +2,19 @@ namespace SearchService.Api.Settings;
 
 public record Configuration
 {
-    public required Azure Azure { get; init; }
+    public required MongoDbSettings MongoDbSettings { get; init; }
+    
+    public required AzureServiceBusSettings AzureServiceBusSettings { get; init; }
 }
 
-public record Azure
-{
-    public required CosmosDb CosmosDb { get; init; }
-}
-
-public record CosmosDb
+public record MongoDbSettings
 {
     public required string ConnectionString { get; init; }
-
+    
     public required string DatabaseName { get; init; }
+}
 
-    public required string ContainerName { get; init; }
+public record AzureServiceBusSettings
+{
+    public required string ConnectionString { get; init; }
 }
