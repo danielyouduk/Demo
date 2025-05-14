@@ -5,9 +5,11 @@ namespace ChecklistService.Application.Extensions;
 
 public static class ApplicationServiceRegistrationExtension
 {
-    public static void AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddMediatR(cfg => 
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        
+        return services;
     }
 }

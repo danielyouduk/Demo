@@ -20,7 +20,6 @@ public static class ConfigurationExtensions
             .Bind(configuration.GetSection(nameof(ApplicationConfiguration)));
         
         services.AddSingleton<IApplicationConfiguration>(applicationConfig);
-        services.AddSingleton(applicationConfig);
 
         return applicationConfig;
     }

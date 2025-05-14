@@ -1,64 +1,28 @@
-using FleetManagementService.Application.Consumers.ChecklistEvents;
 using FleetManagementService.Application.Extensions;
 using FleetManagementService.Application.Settings;
 using FleetManagementService.Persistence.Extensions;
-using MassTransit;
-using Services.Core.Events.DriverEvents;
 using Services.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddControllers();
-builder.Services.AddApplicationServices();
-builder.Services.AddControllers();
-builder.Services.AddApplicationServices();
-
-
 var appConfig = builder.Services.AddApplicationConfiguration<FleetManagementServiceConfiguration>(builder.Configuration);
 
-builder.Services.AddPersistenceServices(appConfig);
+// Add services to the container.
+builder.Services.AddSingleton(appConfig);
+builder.Services.AddControllers();
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
+builder.Services
+    .AddApplicationServices()
+    .AddPersistenceServices(appConfig)
+    .AddMessageBusServices(appConfig)
+    .AddCors(options =>
     {
-        policy.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
+        options.AddDefaultPolicy(policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
     });
-});
-
-builder.Services.AddMassTransit(config =>
-{
-    config.AddConsumer<ChecklistCreatedConsumer>();
-    config.AddConsumer<ChecklistSubmittedConsumer>();
-    
-    config.UsingAzureServiceBus((context, cfg) =>
-    {
-        cfg.Host(context.GetRequiredService<FleetManagementServiceConfiguration>()
-            .AzureServiceBusSettings.ConnectionString);
-        
-        cfg.Message<DriverCreated>(x =>
-            x.SetEntityName("fleet-management-driver-created"));
-        
-        cfg.SubscriptionEndpoint(
-            subscriptionName: "checklist-created",
-            topicPath: "checklist-created",
-            configure: e =>
-            {
-                e.ConfigureConsumer<ChecklistCreatedConsumer>(context);
-            });
-        
-        cfg.SubscriptionEndpoint(
-            subscriptionName: "checklist-submitted",
-            topicPath: "checklist-submitted",
-            configure: e =>
-            {
-                e.ConfigureConsumer<ChecklistSubmittedConsumer>(context);
-            });
-    });
-});
 
 var app = builder.Build();
 
