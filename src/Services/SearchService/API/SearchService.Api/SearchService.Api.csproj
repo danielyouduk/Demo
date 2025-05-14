@@ -20,4 +20,8 @@
       <ProjectReference Include="..\..\Core\SearchService.Application\SearchService.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Data\search-data.json" />
+    </ItemGroup>
+
 </Project>
