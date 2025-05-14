@@ -5,9 +5,6 @@ using FleetManagementService.Persistence.Extensions;
 using MassTransit;
 using Services.Core.Events.DriverEvents;
 
-using Configuration = FleetManagementService.Application.Settings.Configuration;
-using IConfiguration = FleetManagementService.Application.Settings.IConfiguration;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,17 +12,17 @@ builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
 
 // Register configuration
-var configuration = builder.Configuration.GetSection(nameof(Configuration))
-    .Get<Configuration>(options => 
+var configuration = builder.Configuration.GetSection(nameof(ApplicationConfiguration))
+    .Get<ApplicationConfiguration>(options => 
     {
         options.ErrorOnUnknownConfiguration = true;
         options.BindNonPublicProperties = false;
     }) ?? throw new InvalidOperationException("Configuration section 'Configuration' is missing or invalid.");
 
-builder.Services.AddOptions<Configuration>()
-    .Bind(builder.Configuration.GetSection(nameof(Configuration)));
+builder.Services.AddOptions<ApplicationConfiguration>()
+    .Bind(builder.Configuration.GetSection(nameof(ApplicationConfiguration)));
 
-builder.Services.AddSingleton<IConfiguration>(configuration);
+builder.Services.AddSingleton<IApplicationConfiguration>(configuration);
 builder.Services.AddSingleton<IAzureServiceBusSettings>(configuration.AzureServiceBusSettings);
 builder.Services.AddSingleton<IPostgresSqlSettings>(configuration.PostgresSqlSettings);
 

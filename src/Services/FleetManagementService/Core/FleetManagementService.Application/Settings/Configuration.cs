@@ -1,6 +1,6 @@
 namespace FleetManagementService.Application.Settings;
 
-public interface IConfiguration
+public interface IApplicationConfiguration
 {
     IPostgresSqlSettings PostgresSqlSettings { get; }
     IAzureServiceBusSettings AzureServiceBusSettings { get; }
@@ -16,13 +16,13 @@ public interface IPostgresSqlSettings
     string ConnectionString { get; }
 }
 
-public record Configuration : IConfiguration
+public record ApplicationConfiguration : IApplicationConfiguration
 {
     public required PostgresSqlSettings PostgresSqlSettings { get; init; }
     public required AzureServiceBusSettings AzureServiceBusSettings { get; init; }
     
-    IPostgresSqlSettings IConfiguration.PostgresSqlSettings => PostgresSqlSettings;
-    IAzureServiceBusSettings IConfiguration.AzureServiceBusSettings => AzureServiceBusSettings;
+    IPostgresSqlSettings IApplicationConfiguration.PostgresSqlSettings => PostgresSqlSettings;
+    IAzureServiceBusSettings IApplicationConfiguration.AzureServiceBusSettings => AzureServiceBusSettings;
 }
 
 public record AzureServiceBusSettings : IAzureServiceBusSettings
