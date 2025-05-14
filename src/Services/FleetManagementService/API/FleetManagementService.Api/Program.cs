@@ -4,6 +4,7 @@ using FleetManagementService.Application.Settings;
 using FleetManagementService.Persistence.Extensions;
 using MassTransit;
 using Services.Core.Events.DriverEvents;
+using Services.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +13,11 @@ builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
-builder.Services.AddPersistenceServices();
 
-builder.Services.AddApplicationConfiguration(builder.Configuration)
-    .AddSetting<IAzureServiceBusSettings, IAzureServiceBusSettings>(config => config.AzureServiceBusSettings)
-    .AddSetting<IPostgresSqlSettings, IPostgresSqlSettings>(config => config.PostgresSqlSettings);
+
+var appConfig = builder.Services.AddApplicationConfiguration<FleetManagementConfiguration>(builder.Configuration);
+
+builder.Services.AddPersistenceServices(appConfig);
 
 builder.Services.AddCors(options =>
 {
@@ -35,9 +36,9 @@ builder.Services.AddMassTransit(config =>
     
     config.UsingAzureServiceBus((context, cfg) =>
     {
-        var applicationConfig = context.GetRequiredService<IApplicationConfiguration>();
-
-        cfg.Host(applicationConfig.AzureServiceBusSettings.ConnectionString);
+        cfg.Host(appConfig.AzureServiceBusSettings.ConnectionString);
+        // var applicationConfig = context.GetRequiredService<IApplicationConfiguration>();
+        // cfg.Host(applicationConfig.AzureServiceBusSettings.ConnectionString);
         cfg.Message<DriverCreated>(x =>
             x.SetEntityName("fleet-management-driver-created"));
         
