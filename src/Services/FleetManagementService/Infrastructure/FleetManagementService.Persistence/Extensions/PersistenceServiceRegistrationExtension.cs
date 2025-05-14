@@ -1,5 +1,6 @@
 using FleetManagementService.Application.Contracts.Persistence;
 using FleetManagementService.Application.Contracts.Persistence.Common;
+using FleetManagementService.Application.Settings;
 using FleetManagementService.Persistence.Common;
 using FleetManagementService.Persistence.DatabaseContext;
 using FleetManagementService.Persistence.Repositories;
@@ -12,11 +13,11 @@ namespace FleetManagementService.Persistence.Extensions;
 public static class PersistenceServiceRegistrationExtension
 {
     public static void AddPersistenceServices(this IServiceCollection services,
-        IConfiguration configuration)
+        Configuration configuration)
     {
         services.AddDbContext<FleetManagementDatabaseContext>(options =>
         {
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+            options.UseNpgsql(configuration.PostgresSqlSettings.ConnectionString);
         });
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();

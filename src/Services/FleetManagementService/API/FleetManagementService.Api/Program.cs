@@ -2,15 +2,22 @@ using FleetManagementService.Application.Consumers.ChecklistEvents;
 using FleetManagementService.Application.Extensions;
 using FleetManagementService.Persistence.Extensions;
 using MassTransit;
-using Services.Core.Events.ChecklistsEvents;
+using Microsoft.Extensions.Options;
 using Services.Core.Events.DriverEvents;
+using Configuration = FleetManagementService.Application.Settings.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var configuration = builder.Configuration.GetSection(nameof(Configuration))
+    .Get<Configuration>();
+
+builder.Services.AddOptions<Configuration>()
+    .Bind(builder.Configuration.GetSection(nameof(Configuration)));
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
-builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddPersistenceServices(configuration);
 
 builder.Services.AddCors(options =>
 {
@@ -30,8 +37,9 @@ builder.Services.AddMassTransit(config =>
     
     config.UsingAzureServiceBus((context, cfg) =>
     {
-        cfg.Host(builder.Configuration["Azure:ServiceBus:ConnectionString"]);
-
+        var configuration = context.GetRequiredService<IOptions<Configuration>>().Value;
+        
+        cfg.Host(configuration.AzureServiceBusSettings.ConnectionString);
         cfg.Message<DriverCreated>(x =>
             x.SetEntityName("fleet-management-driver-created"));
         
