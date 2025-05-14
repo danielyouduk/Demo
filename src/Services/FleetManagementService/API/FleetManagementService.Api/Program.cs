@@ -10,26 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
-
-// Register configuration
-var configuration = builder.Configuration.GetSection(nameof(ApplicationConfiguration))
-    .Get<ApplicationConfiguration>(options => 
-    {
-        options.ErrorOnUnknownConfiguration = true;
-        options.BindNonPublicProperties = false;
-    }) ?? throw new InvalidOperationException("Configuration section 'Configuration' is missing or invalid.");
-
-builder.Services.AddOptions<ApplicationConfiguration>()
-    .Bind(builder.Configuration.GetSection(nameof(ApplicationConfiguration)));
-
-builder.Services.AddSingleton<IApplicationConfiguration>(configuration);
-builder.Services.AddSingleton<IAzureServiceBusSettings>(configuration.AzureServiceBusSettings);
-builder.Services.AddSingleton<IPostgresSqlSettings>(configuration.PostgresSqlSettings);
+builder.Services.AddApplicationConfiguration(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
-builder.Services.AddPersistenceServices(configuration);
+builder.Services.AddPersistenceServices();
 
 builder.Services.AddCors(options =>
 {
@@ -48,9 +34,9 @@ builder.Services.AddMassTransit(config =>
     
     config.UsingAzureServiceBus((context, cfg) =>
     {
-        //var configuration = context.GetRequiredService<IOptions<Configuration>>().Value;
-        
-        cfg.Host(configuration.AzureServiceBusSettings.ConnectionString);
+        var applicationConfig = context.GetRequiredService<IApplicationConfiguration>();
+
+        cfg.Host(applicationConfig.AzureServiceBusSettings.ConnectionString);
         cfg.Message<DriverCreated>(x =>
             x.SetEntityName("fleet-management-driver-created"));
         

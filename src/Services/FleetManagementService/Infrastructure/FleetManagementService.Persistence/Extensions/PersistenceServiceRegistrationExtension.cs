@@ -11,17 +11,19 @@ namespace FleetManagementService.Persistence.Extensions;
 
 public static class PersistenceServiceRegistrationExtension
 {
-    public static void AddPersistenceServices(this IServiceCollection services,
-        IApplicationConfiguration applicationConfiguration)
+    public static IServiceCollection AddPersistenceServices(this IServiceCollection services)
     {
-        services.AddDbContext<FleetManagementDatabaseContext>(options =>
+        services.AddDbContext<FleetManagementDatabaseContext>((serviceProvider, options) =>
         {
-            options.UseNpgsql(applicationConfiguration.PostgresSqlSettings.ConnectionString);
+            var config = serviceProvider.GetRequiredService<IApplicationConfiguration>();
+            options.UseNpgsql(config.PostgresSqlSettings.ConnectionString);
         });
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IVehicleRepository, VehicleRepository>();
         services.AddScoped<IDriverRepository, DriverRepository>();
+        
+        return services;
     }
 }
