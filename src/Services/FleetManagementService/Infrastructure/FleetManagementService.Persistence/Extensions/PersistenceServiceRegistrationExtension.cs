@@ -5,7 +5,6 @@ using FleetManagementService.Persistence.Common;
 using FleetManagementService.Persistence.DatabaseContext;
 using FleetManagementService.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FleetManagementService.Persistence.Extensions;
@@ -13,7 +12,7 @@ namespace FleetManagementService.Persistence.Extensions;
 public static class PersistenceServiceRegistrationExtension
 {
     public static void AddPersistenceServices(this IServiceCollection services,
-        Configuration configuration)
+        IConfiguration configuration)
     {
         services.AddDbContext<FleetManagementDatabaseContext>(options =>
         {
