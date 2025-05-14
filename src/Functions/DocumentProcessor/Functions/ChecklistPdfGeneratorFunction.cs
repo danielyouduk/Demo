@@ -20,7 +20,7 @@ public class ChecklistPdfGeneratorFunction(
         [ServiceBusTrigger(
             "checklist-submitted",
             "checklist-submitted-processor",
-            Connection = "ServiceBusConnection")] string messageJson,
+            Connection = "Configuration:AzureServiceBusSettings:ConnectionString")] string messageJson,
         FunctionContext context)
     {
         try
@@ -29,8 +29,8 @@ public class ChecklistPdfGeneratorFunction(
             var message = envelope.Message;
 
             var container = cosmosClient.GetContainer(
-                configuration.Value.AzureCosmosDb.DatabaseName,
-                configuration.Value.AzureCosmosDb.ContainerName);
+                configuration.Value.AzureCosmosDbSettings.DatabaseName,
+                configuration.Value.AzureCosmosDbSettings.ContainerName);
             
             var checklist = await container.ReadItemAsync<Checklist>(
                 id: message.ChecklistId.ToString(),

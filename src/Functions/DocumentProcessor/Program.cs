@@ -13,30 +13,32 @@ using Configuration = DocumentProcessor.Settings.Configuration;
 var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.Services.AddOptions<Configuration>().Bind(builder.Configuration.GetSection(nameof(Configuration)));
+
 builder.Services.AddSingleton<CosmosClient>((serviceProvider) =>
 {
-    var configurationOptions = serviceProvider.GetRequiredService<IOptions<Configuration>>();
-    var configuration = configurationOptions.Value;
+    var configuration = serviceProvider.GetRequiredService<IOptions<Configuration>>().Value;
 
     CosmosClient client = new(
-        configuration.AzureCosmosDb.AccountEndpoint, 
-        configuration.AzureCosmosDb.AccountKey
+        configuration.AzureCosmosDbSettings.AccountEndpoint, 
+        configuration.AzureCosmosDbSettings.AccountKey
     );
     return client;
 });
 
 builder.Services.AddSingleton<BlobServiceClient>(serviceProvider =>
 {
-    var configurationOptions = serviceProvider.GetRequiredService<IOptions<Configuration>>();
-    var configuration = configurationOptions.Value;
-    return new BlobServiceClient(configuration.BlobStorageSettings.ConnectionString);
+    var configuration = serviceProvider.GetRequiredService<IOptions<Configuration>>().Value;
+    
+    return new BlobServiceClient(configuration.AzureBlobStorageSettings.ConnectionString);
 });
 
 builder.Services.AddMassTransit(config =>
 {
     config.UsingAzureServiceBus((context, cfg) =>
     {
-        cfg.Host(builder.Configuration["ServiceBusConnection"]);
+        var configuration = context.GetRequiredService<IOptions<Configuration>>().Value;
+        
+        cfg.Host(configuration.AzureServiceBusSettings.ConnectionString);
         
         cfg.ConfigureJsonSerializerOptions(options =>
         {

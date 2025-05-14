@@ -22,22 +22,23 @@ builder.Services.AddOptions<Configuration>().Bind(builder.Configuration.GetSecti
 
 builder.Services.AddSingleton<CosmosClient>((serviceProvider) =>
 {
-    var configurationOptions = serviceProvider.GetRequiredService<IOptions<Configuration>>();
-    var configuration = configurationOptions.Value;
+    var configuration = serviceProvider.GetRequiredService<IOptions<Configuration>>().Value;
 
     CosmosClient client = new(
-        configuration.AzureCosmosDb.AccountEndpoint, 
-        configuration.AzureCosmosDb.AccountKey
+        configuration.AzureCosmosDbSettings.AccountEndpoint, 
+        configuration.AzureCosmosDbSettings.AccountKey
     );
     return client;
 });
 
 builder.Services.AddMassTransit(config =>
 {
+    
     config.UsingAzureServiceBus((context, cfg) =>
     {
-        cfg.Host(builder.Configuration["Azure:ServiceBus:ConnectionString"]);
-
+        var configuration = context.GetRequiredService<IOptions<Configuration>>().Value;
+        
+        cfg.Host(configuration.AzureServiceBusSettings.ConnectionString);
         cfg.Message<DriverCreated>(x =>
             x.SetEntityName("fleet-management-driver-created"));
         
