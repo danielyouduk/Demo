@@ -10,12 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
-builder.Services.AddApplicationConfiguration(builder.Configuration);
-
-// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
 builder.Services.AddPersistenceServices();
+
+builder.Services.AddApplicationConfiguration(builder.Configuration)
+    .AddSetting<IAzureServiceBusSettings, IAzureServiceBusSettings>(config => config.AzureServiceBusSettings)
+    .AddSetting<IPostgresSqlSettings, IPostgresSqlSettings>(config => config.PostgresSqlSettings);
 
 builder.Services.AddCors(options =>
 {
