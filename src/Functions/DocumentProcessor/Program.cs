@@ -11,8 +11,7 @@ using QuestPDF.Infrastructure;
 using Configuration = DocumentProcessor.Settings.Configuration;
 
 var builder = FunctionsApplication.CreateBuilder(args);
-
-builder.Services.AddOptions<Configuration>().Bind(builder.Configuration.GetSection(nameof(Configuration)));
+var appConfig = builder.Services.AddOptions<Configuration>().Bind(builder.Configuration.GetSection(nameof(Configuration)));
 
 builder.Services.AddSingleton<CosmosClient>((serviceProvider) =>
 {
