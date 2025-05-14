@@ -6,7 +6,6 @@ using Services.Core.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 var appConfig = builder.Services.AddApplicationConfiguration<FleetManagementServiceConfiguration>(builder.Configuration);
 
-// Add services to the container.
 builder.Services.AddSingleton(appConfig);
 builder.Services.AddControllers();
 
@@ -26,7 +25,6 @@ builder.Services
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 app.UseCors();
 app.UseAuthorization();
 app.MapControllers();

@@ -1,7 +1,6 @@
 using DocumentProcessor.Settings;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Options;
 using System.Text.Json;
 using Azure.Storage.Blobs;
 using DocumentProcessor.Models;
@@ -12,7 +11,7 @@ namespace DocumentProcessor.Functions;
 
 public class ChecklistPdfGeneratorFunction(
     CosmosClient cosmosClient,
-    IOptions<Configuration> configuration,
+    DocumentProcessorServiceConfiguration configuration,
     BlobServiceClient blobServiceClient)
 {
     [Function(nameof(ChecklistPdfGeneratorFunction))]
@@ -29,8 +28,8 @@ public class ChecklistPdfGeneratorFunction(
             var message = envelope.Message;
 
             var container = cosmosClient.GetContainer(
-                configuration.Value.AzureCosmosDbSettings.DatabaseName,
-                configuration.Value.AzureCosmosDbSettings.ContainerName);
+                configuration.AzureCosmosDbSettings.DatabaseName,
+                configuration.AzureCosmosDbSettings.ContainerName);
             
             var checklist = await container.ReadItemAsync<Checklist>(
                 id: message.ChecklistId.ToString(),

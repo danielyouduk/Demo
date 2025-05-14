@@ -1,67 +1,30 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Azure.Storage.Blobs;
-using MassTransit;
-using Microsoft.Azure.Cosmos;
+using DocumentProcessor.Extensions;
+using DocumentProcessor.Settings;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using QuestPDF.Infrastructure;
-using Configuration = DocumentProcessor.Settings.Configuration;
+using Services.Core.Extensions;
 
 var builder = FunctionsApplication.CreateBuilder(args);
-var appConfig = builder.Services.AddOptions<Configuration>().Bind(builder.Configuration.GetSection(nameof(Configuration)));
+var appConfig = builder.Services.AddApplicationConfiguration<DocumentProcessorServiceConfiguration>(builder.Configuration);
 
-builder.Services.AddSingleton<CosmosClient>((serviceProvider) =>
-{
-    var configuration = serviceProvider.GetRequiredService<IOptions<Configuration>>().Value;
+builder.Services.AddSingleton(appConfig);
 
-    CosmosClient client = new(
-        configuration.AzureCosmosDbSettings.AccountEndpoint, 
-        configuration.AzureCosmosDbSettings.AccountKey
-    );
-    return client;
-});
-
-builder.Services.AddSingleton<BlobServiceClient>(serviceProvider =>
-{
-    var configuration = serviceProvider.GetRequiredService<IOptions<Configuration>>().Value;
-    
-    return new BlobServiceClient(configuration.AzureBlobStorageSettings.ConnectionString);
-});
-
-builder.Services.AddMassTransit(config =>
-{
-    config.UsingAzureServiceBus((context, cfg) =>
+builder.Services
+    .AddMessageBusServices(appConfig)
+    .AddCosmosDbServices(appConfig)
+    .AddBlobStorageServices(appConfig)
+    .Configure<JsonSerializerOptions>(options =>
     {
-        var configuration = context.GetRequiredService<IOptions<Configuration>>().Value;
-        
-        cfg.Host(configuration.AzureServiceBusSettings.ConnectionString);
-        
-        cfg.ConfigureJsonSerializerOptions(options =>
-        {
-            options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-            return options;
-        });
+        options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        options.Converters.Add(new JsonStringEnumConverter());
     });
-});
+
 QuestPDF.Settings.License = LicenseType.Community;
 
-builder.Services.Configure<JsonSerializerOptions>(options =>
-{
-    options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-    options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-    options.Converters.Add(new JsonStringEnumConverter());
-});
-
-
 builder.ConfigureFunctionsWebApplication();
-
-// Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4.
-// builder.Services
-//     .AddApplicationInsightsTelemetryWorkerService()
-//     .ConfigureFunctionsApplicationInsights();
-
 builder.Build().Run();

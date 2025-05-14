@@ -1,4 +1,4 @@
-namespace DocumentProcessor.Settings;
+/*namespace DocumentProcessor.Settings;
 
 public record Configuration
 {
@@ -28,4 +28,4 @@ public record AzureBlobStorageSettings
 public record AzureServiceBusSettings
 {
     public required string ConnectionString { get; init; }
-}
+}*/
