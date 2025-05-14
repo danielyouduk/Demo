@@ -1,7 +1,7 @@
 using MongoDB.Driver;
 using MongoDB.Entities;
-using SearchService.Api.Models;
 using SearchService.Api.Settings;
+using SearchService.Application.Models;
 
 namespace SearchService.Api.Data;
 

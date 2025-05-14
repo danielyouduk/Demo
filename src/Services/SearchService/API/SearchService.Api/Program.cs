@@ -1,34 +1,17 @@
-using MassTransit;
 using Microsoft.Extensions.Options;
-using SearchService.Api.Consumers;
 using SearchService.Api.Data;
-using Configuration = SearchService.Api.Settings.Configuration;
+using SearchService.Api.Settings;
+using SearchService.Application.Extensions;
+using SearchService.Application.Settings;
+using Services.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+var appConfig = builder.Services.AddApplicationConfiguration<SearchServiceConfiguration>(builder.Configuration);
 
-// Add services to the container.
+builder.Services.AddSingleton(appConfig);
 builder.Services.AddControllers();
-builder.Services.AddOptions<Configuration>().Bind(
-    builder.Configuration.GetSection(nameof(Configuration)));
 
-builder.Services.AddMassTransit(config =>
-{
-    config.AddConsumer<DriverCreatedConsumer>();
-
-    config.UsingAzureServiceBus((context, cfg) =>
-    {
-        var configuration = context.GetRequiredService<IOptions<Configuration>>().Value;
-        
-        cfg.Host(configuration.AzureServiceBusSettings.ConnectionString);
-        cfg.SubscriptionEndpoint(
-            subscriptionName: "fleet-management-driver-created-search",
-            topicPath:"fleet-management-driver-created", 
-            configure: e =>
-            {
-                e.ConfigureConsumer<DriverCreatedConsumer>(context);
-            });
-    });
-});
+builder.Services.AddMessageBusServices(appConfig);
 
 var app = builder.Build();
 

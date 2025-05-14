@@ -1,10 +1,9 @@
-using AutoMapper;
 using MassTransit;
 using MongoDB.Entities;
-using SearchService.Api.Models;
+using SearchService.Application.Models;
 using Services.Core.Events.DriverEvents;
 
-namespace SearchService.Api.Consumers;
+namespace SearchService.Application.Consumers;
 
 public class DriverCreatedConsumer : IConsumer<DriverCreated>
 {
