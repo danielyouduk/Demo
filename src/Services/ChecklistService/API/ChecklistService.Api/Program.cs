@@ -1,19 +1,20 @@
+using System.Configuration;
 using ChecklistService.Application.Extensions;
+using ChecklistService.Application.Settings;
 using ChecklistService.Persistence.Extensions;
 using MassTransit;
 using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.Options;
 using Services.Core.Events.ChecklistsEvents;
 using Services.Core.Events.DriverEvents;
-using Configuration = ChecklistService.Application.Settings.Configuration;
+using Services.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+var appConfig = builder.Services.AddApplicationConfiguration<ChecklistServiceConfiguration>(builder.Configuration);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
-builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddPersistenceServices(appConfig);
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -22,7 +23,7 @@ builder.Services.AddOptions<Configuration>().Bind(builder.Configuration.GetSecti
 
 builder.Services.AddSingleton<CosmosClient>((serviceProvider) =>
 {
-    var configuration = serviceProvider.GetRequiredService<IOptions<Configuration>>().Value;
+    var configuration = serviceProvider.GetRequiredService<ChecklistServiceConfiguration>();
 
     CosmosClient client = new(
         configuration.AzureCosmosDbSettings.AccountEndpoint, 
@@ -33,12 +34,11 @@ builder.Services.AddSingleton<CosmosClient>((serviceProvider) =>
 
 builder.Services.AddMassTransit(config =>
 {
-    
     config.UsingAzureServiceBus((context, cfg) =>
     {
-        var configuration = context.GetRequiredService<IOptions<Configuration>>().Value;
+        cfg.Host(context.GetRequiredService<ChecklistServiceConfiguration>()
+            .AzureServiceBusSettings.ConnectionString);
         
-        cfg.Host(configuration.AzureServiceBusSettings.ConnectionString);
         cfg.Message<DriverCreated>(x =>
             x.SetEntityName("fleet-management-driver-created"));
         

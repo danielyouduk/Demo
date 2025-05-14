@@ -15,7 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
 
 
-var appConfig = builder.Services.AddApplicationConfiguration<FleetManagementConfiguration>(builder.Configuration);
+var appConfig = builder.Services.AddApplicationConfiguration<FleetManagementServiceConfiguration>(builder.Configuration);
 
 builder.Services.AddPersistenceServices(appConfig);
 
@@ -36,9 +36,9 @@ builder.Services.AddMassTransit(config =>
     
     config.UsingAzureServiceBus((context, cfg) =>
     {
-        cfg.Host(appConfig.AzureServiceBusSettings.ConnectionString);
-        // var applicationConfig = context.GetRequiredService<IApplicationConfiguration>();
-        // cfg.Host(applicationConfig.AzureServiceBusSettings.ConnectionString);
+        cfg.Host(context.GetRequiredService<FleetManagementServiceConfiguration>()
+            .AzureServiceBusSettings.ConnectionString);
+        
         cfg.Message<DriverCreated>(x =>
             x.SetEntityName("fleet-management-driver-created"));
         
