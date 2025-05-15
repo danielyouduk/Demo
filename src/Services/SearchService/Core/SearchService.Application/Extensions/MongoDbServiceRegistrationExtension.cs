@@ -8,8 +8,16 @@ namespace SearchService.Application.Extensions;
 
 public static class MongoDbServiceRegistrationExtension
 {
-    public static async Task<IServiceCollection> AddMongoDbServices(this IServiceCollection services,
+    public static IServiceCollection AddMongoDbServices(this IServiceCollection services,
         SearchServiceConfiguration serviceConfiguration)
+    {
+        services.AddSingleton<IMongoClient>(serviceProvider => 
+            new MongoClient(serviceConfiguration.MongoDbSettings.ConnectionString));
+            
+        return services;
+    }
+    
+    public static async Task InitializeMongoDb(SearchServiceConfiguration serviceConfiguration)
     {
         await DB.InitAsync(serviceConfiguration.MongoDbSettings.DatabaseName, 
             MongoClientSettings.FromConnectionString(
@@ -20,7 +28,6 @@ public static class MongoDbServiceRegistrationExtension
             .Key(x => x.Type, KeyType.Text)
             .Key(x => x.AccountId, KeyType.Text)
             .CreateAsync();
-        
-        return services;
     }
+
 }

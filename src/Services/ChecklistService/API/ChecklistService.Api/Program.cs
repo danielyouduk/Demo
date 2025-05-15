@@ -6,7 +6,6 @@ using Services.Core.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 var appConfig = builder.Services.AddApplicationConfiguration<ChecklistServiceConfiguration>(builder.Configuration);
 
-// Add services to the container.
 builder.Services.AddSingleton(appConfig);
 builder.Services.AddControllers();
 

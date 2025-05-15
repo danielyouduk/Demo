@@ -8,9 +8,20 @@ var appConfig = builder.Services.AddApplicationConfiguration<SearchServiceConfig
 builder.Services.AddSingleton(appConfig);
 builder.Services.AddControllers();
 
-await builder.Services
+builder.Services
     .AddMessageBusServices(appConfig)
-    .AddMongoDbServices(appConfig);
+    .AddMongoDbServices(appConfig)
+    .AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+    });
+
+await MongoDbServiceRegistrationExtension.InitializeMongoDb(appConfig);
 
 var app = builder.Build();
 
