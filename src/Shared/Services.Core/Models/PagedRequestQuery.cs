@@ -10,4 +10,8 @@ public class PagedRequestQuery
     public string? SortBy { get; init; }
     public bool SortDescending { get; init; }
     public bool? IsActive { get; init; }
+    
+    public string? SearchBy { get; init; }
+    
+    public string? FilterBy { get; init; }
 }

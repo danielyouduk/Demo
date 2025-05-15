@@ -1,5 +1,7 @@
 using SearchService.Application.Extensions;
 using SearchService.Application.Settings;
+using SearchService.Persistence.DatabaseContext;
+using SearchService.Persistence.Extensions;
 using Services.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +11,9 @@ builder.Services.AddSingleton(appConfig);
 builder.Services.AddControllers();
 
 builder.Services
+    .AddApplicationServices()
     .AddMessageBusServices(appConfig)
-    .AddMongoDbServices(appConfig)
+    .AddPersistenceServices(appConfig)
     .AddCors(options =>
     {
         options.AddDefaultPolicy(policy =>
@@ -21,10 +24,13 @@ builder.Services
         });
     });
 
-await MongoDbServiceRegistrationExtension.InitializeMongoDb(appConfig);
-
 var app = builder.Build();
 
 app.UseAuthorization();
 app.MapControllers();
+
+var dbContext = app.Services.GetRequiredService<ISearchServiceDatabaseContext>();
+await dbContext.InitializeAsync();
+
+
 app.Run();

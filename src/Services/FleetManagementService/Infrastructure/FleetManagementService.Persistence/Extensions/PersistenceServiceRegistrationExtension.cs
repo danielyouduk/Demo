@@ -15,8 +15,7 @@ public static class PersistenceServiceRegistrationExtension
     {
         services.AddDbContext<FleetManagementDatabaseContext>((serviceProvider, options) =>
         {
-            var config = serviceProvider.GetRequiredService<FleetManagementServiceConfiguration>();
-            options.UseNpgsql(config.PostgresSqlSettings.ConnectionString);
+            options.UseNpgsql(serviceConfiguration.PostgresSqlSettings.ConnectionString);
         });
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
