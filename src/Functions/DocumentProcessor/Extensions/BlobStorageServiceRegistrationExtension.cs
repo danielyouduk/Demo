@@ -11,12 +11,8 @@ public static class BlobStorageServiceRegistrationExtension
     public static IServiceCollection AddBlobStorageServices(this IServiceCollection services,
         DocumentProcessorServiceConfiguration serviceConfiguration)
     {
-        services.AddSingleton<BlobServiceClient>(serviceProvider =>
-        {
-            var configuration = serviceProvider.GetRequiredService<IOptions<Configuration>>().Value;
-    
-            return new BlobServiceClient(serviceConfiguration.AzureBlobStorageSettings.ConnectionString);
-        });
+        services.AddSingleton<BlobServiceClient>(serviceProvider => 
+            new BlobServiceClient(serviceConfiguration.AzureBlobStorageSettings.ConnectionString));
         
         return services;
     }

@@ -1,8 +1,11 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using ChecklistService.Application.Settings;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Core.Events.ChecklistsEvents;
 using Services.Core.Events.DriverEvents;
+using Services.Core.ServiceBus;
 
 namespace ChecklistService.Application.Extensions;
 
@@ -17,14 +20,19 @@ public static class MessageBusServiceRegistrationExtension
             {
                 cfg.Host(serviceConfiguration.AzureServiceBusSettings.ConnectionString);
         
-                cfg.Message<DriverCreated>(x =>
-                    x.SetEntityName("fleet-management-driver-created"));
-        
                 cfg.Message<ChecklistCreated>(x => 
-                    x.SetEntityName("checklist-created"));
+                    x.SetEntityName(ServiceBusConstants.Topics.Checklist.Created));
         
                 cfg.Message<ChecklistSubmitted>(x => 
-                    x.SetEntityName("checklist-submitted"));
+                    x.SetEntityName(ServiceBusConstants.Topics.Checklist.Submitted));
+                
+                cfg.ConfigureJsonSerializerOptions(options =>
+                {
+                    options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                    return options;
+                });
+
             });
         });
         

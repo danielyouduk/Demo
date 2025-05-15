@@ -1,8 +1,11 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using FleetManagementService.Application.Consumers.ChecklistEvents;
 using FleetManagementService.Application.Settings;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Core.Events.DriverEvents;
+using Services.Core.ServiceBus;
 
 namespace FleetManagementService.Application.Extensions;
 
@@ -21,17 +24,25 @@ public static class MessageBusServiceRegistrationExtension
                 cfg.Host(serviceConfiguration.AzureServiceBusSettings.ConnectionString);
 
                 cfg.Message<DriverCreated>(x =>
-                    x.SetEntityName("fleet-management-driver-created"));
+                    x.SetEntityName(ServiceBusConstants.Topics.Driver.Created));
 
                 cfg.SubscriptionEndpoint(
-                    subscriptionName: "checklist-created",
-                    topicPath: "checklist-created",
+                    subscriptionName: ServiceBusConstants.Topics.Checklist.Subscriptions.FleetManagementCreated,
+                    topicPath: ServiceBusConstants.Topics.Checklist.Created,
                     configure: e => { e.ConfigureConsumer<ChecklistCreatedConsumer>(context); });
 
                 cfg.SubscriptionEndpoint(
-                    subscriptionName: "checklist-submitted",
-                    topicPath: "checklist-submitted",
+                    subscriptionName: ServiceBusConstants.Topics.Checklist.Subscriptions.FleetManagementSubmitted,
+                    topicPath: ServiceBusConstants.Topics.Checklist.Submitted,
                     configure: e => { e.ConfigureConsumer<ChecklistSubmittedConsumer>(context); });
+                
+                cfg.ConfigureJsonSerializerOptions(options =>
+                {
+                    options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                    return options;
+                });
+
             });
         });
         

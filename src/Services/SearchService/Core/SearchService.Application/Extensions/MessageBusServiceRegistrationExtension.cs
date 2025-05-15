@@ -1,7 +1,10 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using SearchService.Application.Consumers;
 using SearchService.Application.Settings;
+using Services.Core.ServiceBus;
 
 namespace SearchService.Application.Extensions;
 
@@ -19,12 +22,20 @@ public static class MessageBusServiceRegistrationExtension
                 cfg.Host(serviceConfiguration.AzureServiceBusSettings.ConnectionString);
                 
                 cfg.SubscriptionEndpoint(
-                    subscriptionName: "fleet-management-driver-created-search",
-                    topicPath:"fleet-management-driver-created", 
+                    subscriptionName: ServiceBusConstants.Topics.Driver.Subscriptions.SearchService,
+                    topicPath: ServiceBusConstants.Topics.Driver.Created, 
                     configure: e =>
                     {
                         e.ConfigureConsumer<DriverCreatedConsumer>(context);
                     });
+                
+                cfg.ConfigureJsonSerializerOptions(options =>
+                {
+                    options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                    return options;
+                });
+
             });
         });
         

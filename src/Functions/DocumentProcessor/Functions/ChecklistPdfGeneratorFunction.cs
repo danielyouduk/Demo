@@ -6,6 +6,7 @@ using Azure.Storage.Blobs;
 using DocumentProcessor.Models;
 using QuestPDF.Fluent;
 using Services.Core.Events.ChecklistsEvents;
+using Services.Core.ServiceBus;
 
 namespace DocumentProcessor.Functions;
 
@@ -17,9 +18,9 @@ public class ChecklistPdfGeneratorFunction(
     [Function(nameof(ChecklistPdfGeneratorFunction))]
     public async Task Run(
         [ServiceBusTrigger(
-            "checklist-submitted",
-            "checklist-submitted-processor",
-            Connection = "Configuration:AzureServiceBusSettings:ConnectionString")] string messageJson,
+            ServiceBusConstants.Topics.Checklist.Submitted,
+            ServiceBusConstants.Topics.Checklist.Subscriptions.DocumentProcessorSubmitted,
+            Connection = "ApplicationConfiguration:AzureServiceBusSettings:ConnectionString")] string messageJson,
         FunctionContext context)
     {
         try
