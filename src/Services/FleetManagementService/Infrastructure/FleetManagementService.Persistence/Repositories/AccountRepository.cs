@@ -14,21 +14,19 @@ namespace FleetManagementService.Persistence.Repositories;
 
 public class AccountRepository(FleetManagementDatabaseContext context, IMapper mapper) : IAccountRepository
 {
-    public async Task<BasePagedResult<AccountDto>> GetAccountsAsync(PagedRequestQuery pagedRequestQuery)
+    public async Task<BasePagedResult<AccountDto>> GetAccountsAsync(PagedRequestQuery pagedRequestQuery, CancellationToken cancellationToken)
     {
         // Base query
-        var query = context.Accounts
-            .AsQueryable();
+        var query = context.Accounts.AsQueryable();
         
         // Apply sorting
         query = OrderingHelper.ApplyOrdering(query, pagedRequestQuery.SortBy, pagedRequestQuery.SortDescending);
         
         // Execute the query with pagination
-        var queryCount = await query.CountAsync();
+        var queryCount = await query.CountAsync(cancellationToken);
         
         // Apply pagination
-        var accounts = await query.ApplyPaging(pagedRequestQuery)
-            .ToListAsync();
+        var accounts = await query.ApplyPaging(pagedRequestQuery).ToListAsync(cancellationToken);
         
         // Map and return the final result
         return new BasePagedResult<AccountDto>
@@ -38,11 +36,19 @@ public class AccountRepository(FleetManagementDatabaseContext context, IMapper m
         };
     }
 
-    public async Task<AccountDto?> GetAccountByIdAsync(Guid id)
+    public async Task<AccountDto?> GetAccountByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var account = await context.Accounts.FirstOrDefaultAsync(account => account.Id == id);
+        try
+        {
+            var account = await context.Accounts.FirstOrDefaultAsync(account => account.Id == id, cancellationToken);
 
-        return mapper.Map<AccountDto>(account);
+            return mapper.Map<AccountDto>(account);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public async Task<AccountDto> CreateAsync(CreateAccountCommand account)

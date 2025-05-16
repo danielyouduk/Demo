@@ -9,9 +9,9 @@ namespace FleetManagementService.Application.Contracts.Persistence;
 
 public interface IAccountRepository
 {
-    Task<BasePagedResult<AccountDto>> GetAccountsAsync(PagedRequestQuery pagedRequestQuery);
+    Task<BasePagedResult<AccountDto>> GetAccountsAsync(PagedRequestQuery pagedRequestQuery, CancellationToken cancellationToken);
     
-    Task<AccountDto?> GetAccountByIdAsync(Guid id);
+    Task<AccountDto?> GetAccountByIdAsync(Guid id, CancellationToken cancellationToken);
     
     Task<AccountDto> CreateAsync(CreateAccountCommand account);
     

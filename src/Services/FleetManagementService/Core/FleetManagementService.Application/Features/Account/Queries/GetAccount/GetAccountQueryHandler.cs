@@ -11,13 +11,23 @@ public class GetAccountQueryHandler(IAccountRepository accountRepository)
 {
     public async Task<ServiceResponse<AccountDto>> Handle(GetAccountQuery request, CancellationToken cancellationToken)
     {
-        var account = await accountRepository.GetAccountByIdAsync(request.Id);
+        var account = await accountRepository.GetAccountByIdAsync(request.Id, cancellationToken);
+
+        if (account == null)
+        {
+            return new ServiceResponse<AccountDto>
+            {
+                Status = ServiceStatus.NotFound,
+                Message = $"Account with ID {request.Id} not found",
+                Data = null
+            };
+        }
 
         return new ServiceResponse<AccountDto>
         {
-            Data = account,
             Status = ServiceStatus.Success,
-            Message = "Success"
+            Message = "Account retrieved successfully",
+            Data = account
         };
     }
 }

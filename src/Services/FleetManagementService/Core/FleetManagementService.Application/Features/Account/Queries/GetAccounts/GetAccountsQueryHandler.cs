@@ -11,7 +11,7 @@ public class GetAccountsQueryHandler(IAccountRepository accountRepository)
 {
     public async Task<ServiceResponseCollection<IReadOnlyCollection<AccountDto>>> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
     {
-        var accounts = await accountRepository.GetAccountsAsync(request.PagedRequestQuery);
+        var accounts = await accountRepository.GetAccountsAsync(request.PagedRequestQuery, cancellationToken);
         
         return new ServiceResponseCollection<IReadOnlyCollection<AccountDto>>
         {

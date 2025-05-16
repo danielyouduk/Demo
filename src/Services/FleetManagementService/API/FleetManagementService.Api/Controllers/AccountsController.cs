@@ -82,7 +82,6 @@ public class AccountsController(ISender mediator) : ControllerBase
         }
     }
     
-    // POST api/accounts
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
