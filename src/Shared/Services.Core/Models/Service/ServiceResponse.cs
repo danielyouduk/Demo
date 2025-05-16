@@ -1,8 +1,10 @@
+using Services.Core.Enums;
+
 namespace Services.Core.Models.Service;
 
 public class ServiceResponse<T>
 {
-    public required bool Success { get; set; }
+    public required ServiceStatus Status { get; set; }
     
     public required string Message { get; set; }
     

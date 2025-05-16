@@ -1,6 +1,7 @@
 using FleetManagementService.Application.Contracts.Persistence;
 using FleetManagementService.Application.Features.Vehicle.Shared;
 using MediatR;
+using Services.Core.Enums;
 using Services.Core.Models.Service;
 
 namespace FleetManagementService.Application.Features.Vehicle.Queries.GetVehicle;
@@ -15,7 +16,7 @@ public class GetVehicleQueryHandler(IVehicleRepository vehicleRepository)
         return new ServiceResponse<VehicleDto>
         {
             Data = vehicle,
-            Success = true,
+            Status = ServiceStatus.Success,
             Message = "Success"
         };
     }

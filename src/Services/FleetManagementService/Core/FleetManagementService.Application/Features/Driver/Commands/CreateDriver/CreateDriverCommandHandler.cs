@@ -3,6 +3,7 @@ using FleetManagementService.Application.Contracts.Persistence;
 using FleetManagementService.Application.Contracts.Persistence.Common;
 using MassTransit;
 using MediatR;
+using Services.Core.Enums;
 using Services.Core.Events.DriverEvents;
 using Services.Core.Models.Service;
 
@@ -22,7 +23,7 @@ public class CreateDriverCommandHandler(
         if (!validationResult.IsValid)
             return new ServiceResponse<Guid>
             {
-                Success = false,
+                Status = ServiceStatus.Success,
                 Message = validationResult.Errors.First().ErrorMessage
             };
 
@@ -37,7 +38,7 @@ public class CreateDriverCommandHandler(
             return new ServiceResponse<Guid>
             {
                 Data = driver.Id,
-                Success = true,
+                Status = ServiceStatus.Success,
                 Message = $"Successfully created driver {driver.FirstName} {driver.LastName}."
             };
         }
@@ -45,7 +46,7 @@ public class CreateDriverCommandHandler(
         {
             return new ServiceResponse<Guid>
             {
-                Success = false,
+                Status = ServiceStatus.Failure,
                 Message = $"An error occurred while creating the driver {request.FirstName} {request.LastName}."
             };
         }

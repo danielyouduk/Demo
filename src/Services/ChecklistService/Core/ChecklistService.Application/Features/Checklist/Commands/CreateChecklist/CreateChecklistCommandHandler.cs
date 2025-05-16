@@ -2,6 +2,7 @@ using ChecklistService.Application.Contracts.Persistence;
 using ChecklistService.Application.Features.Checklist.Shared;
 using MassTransit;
 using MediatR;
+using Services.Core.Enums;
 using Services.Core.Events.ChecklistsEvents;
 using Services.Core.Models.Service;
 
@@ -27,7 +28,7 @@ public class CreateChecklistCommandHandler(IChecklistRepository checklistReposit
         {
             Data = checklist,
             Message = "Checklist created successfully",
-            Success = true
+            Status = ServiceStatus.Success
         };
     }
 }

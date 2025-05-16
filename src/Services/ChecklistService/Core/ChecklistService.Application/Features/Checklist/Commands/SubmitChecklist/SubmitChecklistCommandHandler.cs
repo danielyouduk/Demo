@@ -1,6 +1,7 @@
 using ChecklistService.Application.Contracts.Persistence;
 using MassTransit;
 using MediatR;
+using Services.Core.Enums;
 using Services.Core.Events.ChecklistsEvents;
 using Services.Core.Models.Service;
 
@@ -28,7 +29,7 @@ public class SubmitChecklistCommandHandler(IChecklistRepository repository, IPub
         {
             Data = Unit.Value,
             Message = "Checklist submitted successfully",
-            Success = true
+            Status = ServiceStatus.Success
         };
     }
 }

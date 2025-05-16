@@ -1,6 +1,7 @@
 using FleetManagementService.Application.Contracts.Persistence;
 using FleetManagementService.Application.Features.Driver.Shared;
 using MediatR;
+using Services.Core.Enums;
 using Services.Core.Models.Service;
 
 namespace FleetManagementService.Application.Features.Driver.Queries.GetDrivers;
@@ -18,7 +19,7 @@ public class GetDriversQueryHandler(IDriverRepository driverRepository)
             TotalRecords = drivers.TotalRecords,
             PageSize = request.PagedRequestQuery.PageSize,
             Message = "Success",
-            Success = true
+            Status = ServiceStatus.Success,
         };
     }
 }

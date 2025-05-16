@@ -2,6 +2,7 @@ using FleetManagementService.Application.Contracts.Persistence;
 using FleetManagementService.Application.Contracts.Persistence.Common;
 using FleetManagementService.Application.Features.Account.Shared;
 using MediatR;
+using Services.Core.Enums;
 using Services.Core.Models.Service;
 
 namespace FleetManagementService.Application.Features.Account.Commands.CreateAccount;
@@ -22,7 +23,7 @@ public class CreateAccountCommandHandler(IAccountRepository accountRepository, I
         {
             Data = account,
             Message = "Account created successfully",
-            Success = true
+            Status = ServiceStatus.Success
         };
     }
 }

@@ -1,6 +1,7 @@
 using FleetManagementService.Application.Contracts.Persistence;
 using FleetManagementService.Application.Features.Vehicle.Shared;
 using MediatR;
+using Services.Core.Enums;
 using Services.Core.Models.Service;
 
 namespace FleetManagementService.Application.Features.Vehicle.Queries.GetVehicles;
@@ -18,7 +19,7 @@ public class GetVehiclesQueryHandler(IVehicleRepository vehicleRepository)
             TotalRecords = vehicles.TotalRecords,
             PageSize = request.PagedRequestQuery.PageSize,
             Message = "Success",
-            Success = true
+            Status = ServiceStatus.Success,
         };
     }
 }

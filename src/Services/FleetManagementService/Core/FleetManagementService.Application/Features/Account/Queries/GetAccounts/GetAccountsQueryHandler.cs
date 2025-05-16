@@ -1,6 +1,7 @@
 using FleetManagementService.Application.Contracts.Persistence;
 using FleetManagementService.Application.Features.Account.Shared;
 using MediatR;
+using Services.Core.Enums;
 using Services.Core.Models.Service;
 
 namespace FleetManagementService.Application.Features.Account.Queries.GetAccounts;
@@ -18,7 +19,7 @@ public class GetAccountsQueryHandler(IAccountRepository accountRepository)
             TotalRecords = accounts.TotalRecords,
             PageSize = request.PagedRequestQuery.PageSize,
             Message = "Accounts retrieved successfully",
-            Success = true
+            Status = ServiceStatus.Success
         };
     }
 }

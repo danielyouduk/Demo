@@ -1,6 +1,7 @@
 using FleetManagementService.Application.Contracts.Persistence;
 using FleetManagementService.Application.Features.Driver.Shared;
 using MediatR;
+using Services.Core.Enums;
 using Services.Core.Models.Service;
 
 namespace FleetManagementService.Application.Features.Driver.Queries.GetDriver;
@@ -15,7 +16,7 @@ public class GetDriverQueryHandler(IDriverRepository driverRepository)
         return new ServiceResponse<DriverDto>
         {
             Data = driver,
-            Success = true,
+            Status = ServiceStatus.Success,
             Message = "Success"
         };
     }

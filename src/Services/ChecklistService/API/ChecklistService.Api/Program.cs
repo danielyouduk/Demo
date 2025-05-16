@@ -23,7 +23,8 @@ builder.Services
                 .AllowAnyMethod()
                 .AllowAnyHeader();
         });
-    });
+    })
+    .AddRateLimiter(); // todo: Add rate limiter
 
 var app = builder.Build();
 
@@ -35,4 +36,5 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 app.UseAuthorization();
 app.MapControllers();
+app.UseRateLimiter();
 app.Run();

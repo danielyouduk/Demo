@@ -1,5 +1,6 @@
 using MediatR;
 using SearchService.Application.Contracts.Persistence;
+using Services.Core.Enums;
 using Services.Core.Models;
 using Services.Core.Models.Service;
 
@@ -16,7 +17,7 @@ public class GetSearchResultsQueryHandler(ISearchRepository searchRepository)
         {
             Data = results,
             TotalRecords = results.TotalRecords,
-            Success = true,
+            Status = ServiceStatus.Success,
             Message = "Success"
         };
     }

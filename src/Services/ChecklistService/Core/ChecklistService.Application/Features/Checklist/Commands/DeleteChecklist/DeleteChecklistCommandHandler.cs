@@ -1,6 +1,7 @@
 using ChecklistService.Application.Contracts.Persistence;
 using MassTransit;
 using MediatR;
+using Services.Core.Enums;
 using Services.Core.Events.ChecklistsEvents;
 using Services.Core.Models.Service;
 
@@ -23,7 +24,7 @@ public class DeleteChecklistCommandHandler(IChecklistRepository checklistReposit
         {
             Data = Unit.Value,
             Message = "Checklist deleted successfully",
-            Success = true
+            Status = ServiceStatus.Success
         };
     }
 }

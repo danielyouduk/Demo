@@ -1,6 +1,7 @@
 using ChecklistService.Application.Contracts.Persistence;
 using FleetManagementService.Application.Contracts.Persistence.Common;
 using MediatR;
+using Services.Core.Enums;
 using Services.Core.Models.Service;
 
 namespace ChecklistService.Application.Features.Checklist.Commands.UpdateChecklist;
@@ -16,7 +17,7 @@ public class UpdateChecklistCommandHandler(IChecklistRepository repository)
         {
             Data = Unit.Value,
             Message = "Checklist updated successfully",
-            Success = true
+            Status = ServiceStatus.Success
         };
     }
 }

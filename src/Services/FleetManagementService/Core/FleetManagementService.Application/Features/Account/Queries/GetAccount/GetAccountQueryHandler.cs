@@ -1,6 +1,7 @@
 using FleetManagementService.Application.Contracts.Persistence;
 using FleetManagementService.Application.Features.Account.Shared;
 using MediatR;
+using Services.Core.Enums;
 using Services.Core.Models.Service;
 
 namespace FleetManagementService.Application.Features.Account.Queries.GetAccount;
@@ -15,7 +16,7 @@ public class GetAccountQueryHandler(IAccountRepository accountRepository)
         return new ServiceResponse<AccountDto>
         {
             Data = account,
-            Success = true,
+            Status = ServiceStatus.Success,
             Message = "Success"
         };
     }
