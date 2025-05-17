@@ -1,4 +1,5 @@
 using FleetManagementService.Application.Contracts.Persistence;
+using FleetManagementService.Application.Contracts.Persistence.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Services.Core.Enums;
@@ -9,7 +10,8 @@ namespace FleetManagementService.Application.Features.Account.Commands.UpdateAcc
 public class UpdateAccountCommandHandler(
     IAccountRepository accountRepository,
     UpdateAccountCommandValidator validator,
-    ILogger<UpdateAccountCommandHandler> logger)
+    ILogger<UpdateAccountCommandHandler> logger,
+    IUnitOfWork unitOfWork)
     : IRequestHandler<UpdateAccountCommand, ServiceResponse<Unit>>
 {
     public async Task<ServiceResponse<Unit>> Handle(UpdateAccountCommand request, CancellationToken cancellationToken)
@@ -18,6 +20,7 @@ public class UpdateAccountCommandHandler(
         {
             await validator.ValidateAsync(request, cancellationToken);
             await accountRepository.UpdateAsync(request, cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
         
             return new ServiceResponse<Unit>
             {
