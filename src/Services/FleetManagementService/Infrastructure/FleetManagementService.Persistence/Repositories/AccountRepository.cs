@@ -1,4 +1,3 @@
-using System.Data.Common;
 using FleetManagementService.Application.Features.Account.Shared;
 using FleetManagementService.Persistence.DatabaseContext;
 using AutoMapper;
@@ -7,7 +6,6 @@ using FleetManagementService.Application.Features.Account.Commands.CreateAccount
 using FleetManagementService.Application.Features.Account.Commands.UpdateAccount;
 using FleetManagementService.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using Services.Core.Events.ChecklistsEvents;
 using Services.Core.Helpers;
@@ -130,7 +128,7 @@ public class AccountRepository(
 
         try
         {
-            var existingAccount = await context.Set<Account>()
+            var existingAccount = await context.Accounts
                 .FirstOrDefaultAsync(a => a.Id == account.Id, cancellationToken);
             
             if (existingAccount == null)
@@ -139,6 +137,8 @@ public class AccountRepository(
             }
 
             mapper.Map(account, existingAccount);
+            
+            context.Entry(existingAccount).Property(p => p.CreatedAt).IsModified = false;
             context.Update(existingAccount);
 
             return true;
@@ -151,23 +151,33 @@ public class AccountRepository(
         }
     }
 
-    public Task AddAccountUser(Guid accountId, Guid userId)
+    public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        try
+        {
+            return await context.Accounts
+                .AsNoTracking()
+                .AnyAsync(account => account.Id == id, cancellationToken);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception e)
+        {
+            // todo: Add Exception log message for AccountRepository.ExistsAsync
+            logger.LogError(e, string.Empty, id);
+            throw;
+        }
     }
 
-    public async Task<bool> ExistsAsync(Guid id)
-    {
-        return await context.Accounts.AnyAsync(account => account.Id == id);
-    }
-
-    public async Task<bool> IncrementChecklistCreatedCount(ChecklistCreated checklistCreated, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateChecklistCreated(ChecklistCreated checklistCreated, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(checklistCreated);
         
         try
         {
-            var existingAccount = await context.Set<Account>()
+            var existingAccount = await context.Accounts
                 .FirstOrDefaultAsync(a => a.Id == checklistCreated.AccountId, cancellationToken);
             
             if (existingAccount == null)
@@ -189,17 +199,17 @@ public class AccountRepository(
         }
         catch (Exception ex)
         {
-            // todo: Add Exception log message for AccountRepository.IncrementChecklistCreatedCount
+            // todo: Add Exception log message for AccountRepository.UpdateChecklistCreated
             logger.LogError(ex, string.Empty, checklistCreated.AccountId);
             throw;
         }
     }
 
-    public async Task<bool> IncrementChecklistSubmittedCount(ChecklistSubmitted checklistSubmitted, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateChecklistSubmitted(ChecklistSubmitted checklistSubmitted, CancellationToken cancellationToken = default)
     {
         try
         {
-            var existingAccount = await context.Set<Account>()
+            var existingAccount = await context.Accounts
                 .FirstOrDefaultAsync(a => a.Id == checklistSubmitted.AccountId, cancellationToken);
             
             if (existingAccount == null)
@@ -219,17 +229,12 @@ public class AccountRepository(
         {
             throw;
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            // todo: Add Exception log message for AccountRepository.IncrementChecklistSubmittedCount
-            logger.LogError(ex, string.Empty, checklistSubmitted.AccountId);
+            // todo: Add Exception log message for AccountRepository.UpdateChecklistSubmitted
+            logger.LogError(e, string.Empty, checklistSubmitted.AccountId);
             throw;
         }
-    }
-
-    public async Task UpdateLastChecklistSubmission(Guid accountId, DateTime lastChecklistSubmission)
-    {
-        var account = await context.Accounts.FirstOrDefaultAsync(account => account.Id == accountId);
     }
 }
 

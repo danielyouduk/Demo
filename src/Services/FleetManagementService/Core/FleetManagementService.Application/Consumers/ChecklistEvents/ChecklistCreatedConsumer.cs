@@ -11,8 +11,7 @@ public class ChecklistCreatedConsumer(IAccountRepository accountRepository, IUni
     {
         var checklist = context.Message;
 
-        await accountRepository.IncrementChecklistCreatedCount(
-            new ChecklistCreated { AccountId = checklist.AccountId, ChecklistId = checklist.ChecklistId, CreatedAt = checklist.CreatedAt});
+        await accountRepository.UpdateChecklistCreated(checklist, context.CancellationToken);
 
         await unitOfWork.SaveChangesAsync();
     }

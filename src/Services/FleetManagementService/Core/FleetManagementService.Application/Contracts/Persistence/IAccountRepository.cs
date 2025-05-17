@@ -13,17 +13,13 @@ public interface IAccountRepository
     
     Task<AccountDto?> GetAccountByIdAsync(Guid id, CancellationToken cancellationToken);
     
-    Task<AccountDto> CreateAsync(CreateAccountCommand account);
+    Task<AccountDto> CreateAsync(CreateAccountCommand account, CancellationToken cancellationToken);
     
-    Task UpdateAsync(UpdateAccountCommand account);
+    Task<bool> UpdateAsync(UpdateAccountCommand account, CancellationToken cancellationToken);
     
-    Task AddAccountUser(Guid accountId, Guid userId);
+    Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken);
     
-    Task<bool> ExistsAsync(Guid id);
+    Task<bool> UpdateChecklistCreated(ChecklistCreated checklistCreated, CancellationToken cancellationToken);
     
-    Task IncrementChecklistCreatedCount(ChecklistCreated checklistCreated);
-    
-    Task IncrementChecklistSubmittedCount(ChecklistSubmitted checklistSubmitted);
-
-    Task UpdateLastChecklistSubmission(Guid accountId, DateTime lastChecklistSubmission);
+    Task<bool> UpdateChecklistSubmitted(ChecklistSubmitted checklistSubmitted, CancellationToken cancellationToken);
 }

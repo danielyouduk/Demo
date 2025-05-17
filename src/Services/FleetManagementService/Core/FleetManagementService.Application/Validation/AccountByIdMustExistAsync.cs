@@ -1,15 +1,32 @@
 using FleetManagementService.Application.Contracts.Persistence;
+using FleetManagementService.Application.Exceptions;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 
 namespace FleetManagementService.Application.Validation;
 
-public class AccountByIdMustExistAsync(IAccountRepository repository) : AbstractValidator<Guid>
+public class AccountByIdMustExistAsync(
+    IAccountRepository accountRepository,
+    ILogger<AccountByIdMustExistAsync> logger) : AbstractValidator<Guid>
 {
-    public async Task<bool> ValidateAsync(Guid accountId)
+    public async Task<bool> ValidateAsync(Guid accountId, CancellationToken cancellationToken = default)
     {
-        if (!await repository.ExistsAsync(accountId))
-            return false;
+        try
+        {
+            if (!await accountRepository.ExistsAsync(accountId, cancellationToken))
+                throw new NotFoundException("Account", accountId);
 
-        return true;
+            return true;
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception e)
+        {
+            // todo: Add Exception log message for AccountByIdMustExistAsync.ValidateAsync
+            logger.LogError(e, string.Empty, accountId);
+            throw;
+        }
     }
 }

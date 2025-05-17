@@ -13,7 +13,7 @@ public class CreateAccountCommandHandler(IAccountRepository accountRepository, I
     public async Task<ServiceResponse<AccountDto>> Handle(
         CreateAccountCommand request, CancellationToken cancellationToken)
     {
-        var account = await accountRepository.CreateAsync(request);
+        var account = await accountRepository.CreateAsync(request, cancellationToken);
         
         // todo: Add Current User to account
         

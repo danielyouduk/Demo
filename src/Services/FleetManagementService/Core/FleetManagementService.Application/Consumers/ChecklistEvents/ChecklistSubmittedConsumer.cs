@@ -11,8 +11,7 @@ public class ChecklistSubmittedConsumer(IAccountRepository accountRepository, IU
     {
         var checklist = context.Message;
         
-        await accountRepository.IncrementChecklistSubmittedCount(checklist);
-        await accountRepository.UpdateLastChecklistSubmission(checklist.AccountId, checklist.SubmittedAt);
+        await accountRepository.UpdateChecklistSubmitted(checklist, context.CancellationToken);
         
         await unitOfWork.SaveChangesAsync();
     }
