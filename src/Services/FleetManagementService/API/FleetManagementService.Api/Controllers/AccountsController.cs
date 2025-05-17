@@ -85,7 +85,6 @@ public class AccountsController(ISender mediator) : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ServiceResponse<AccountDto>>> Post(
         [FromBody] CreateAccountCommand createAccountCommand)
     {
