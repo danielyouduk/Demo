@@ -143,6 +143,10 @@ public class AccountRepository(
 
             return true;
         }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
         catch (Exception e)
         {
             // todo: Add Exception log message for AccountRepository.UpdateAsync
