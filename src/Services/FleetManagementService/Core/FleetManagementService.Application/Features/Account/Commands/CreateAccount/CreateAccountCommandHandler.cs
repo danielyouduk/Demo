@@ -40,6 +40,5 @@ public class CreateAccountCommandHandler(
             logger.LogError(e, string.Empty, request);
             throw;
         }
-       
     }
 }
