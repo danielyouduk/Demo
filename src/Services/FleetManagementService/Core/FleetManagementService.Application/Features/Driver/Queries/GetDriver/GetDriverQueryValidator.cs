@@ -11,7 +11,7 @@ public class GetDriverQueryValidator : BaseValidator<GetDriverQuery>
     {
         RuleFor(command => command.Id)
             .NotEmpty()
-            .WithMessage("Account ID is required");
+            .WithMessage("Driver ID is required");
         
         RuleFor(command => command.Id)
             .MustAsync(async (id, cancellation) => await driverByIdMustExistAsync.ValidateAsync(id, cancellation));

@@ -22,7 +22,7 @@ public class DriverRepository(
         try
         {
             // Base query
-            var query = context.Drivers.AsQueryable();
+            var query = context.Drivers.AsNoTracking().AsQueryable();
         
             // Apply sorting
             if (!string.IsNullOrEmpty(pagedRequestQuery.SortBy))
@@ -49,6 +49,7 @@ public class DriverRepository(
             
             // Map and return the final result
             var mappedDrivers = mapper.Map<IReadOnlyCollection<DriverDto>>(drivers);
+            
             return new BasePagedResult<DriverDto>
             {
                 Data = mappedDrivers,

@@ -17,6 +17,16 @@ public class GetDriversQueryHandler(
     {
         try
         {
+            var validationResult = await validator.ValidateAsync(request, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                return new ServiceResponseCollection<IReadOnlyCollection<DriverDto>>
+                {
+                    Status = ServiceStatus.Invalid,
+                    Message = validationResult.Errors.First().ErrorMessage
+                };           
+            }
+            
             var drivers = await driverRepository.GetDriversAsync(request.PagedRequestQuery, cancellationToken);
 
             return new ServiceResponseCollection<IReadOnlyCollection<DriverDto>>

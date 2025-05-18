@@ -32,7 +32,7 @@ public class VehicleConfiguration : BaseConfiguration<Vehicle>
         
         builder.Property(entity => entity.RegistrationNumber)
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(10);
     }
 
     protected override void ConfigureSeedData(EntityTypeBuilder<Vehicle> builder)
