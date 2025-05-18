@@ -5,8 +5,4 @@ using Services.Core.Models.Service;
 
 namespace FleetManagementService.Application.Features.Driver.Queries.GetDriver;
 
-public record GetDriverQuery : IRequest<ServiceResponse<DriverDto>>
-{
-    [Required]
-    public Guid Id { get; set; }
-}
+public record GetDriverQuery(Guid Id) : IRequest<ServiceResponse<DriverDto>>;

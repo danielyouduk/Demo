@@ -1,7 +1,6 @@
 using FleetManagementService.Application.Features.Account.Commands.CreateAccount;
 using FleetManagementService.Application.Features.Account.Commands.UpdateAccount;
 using FleetManagementService.Application.Features.Account.Shared;
-using FleetManagementService.Domain.Entities;
 using Services.Core.Events.ChecklistsEvents;
 using Services.Core.Models;
 

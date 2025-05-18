@@ -20,16 +20,22 @@ public class CreateAccountCommandHandler(
     {
         try
         {
-            await validator.ValidateAsync(request, cancellationToken);
-            var account = await accountRepository.CreateAsync(request, cancellationToken);
-        
-            // todo: Add Current User to account
-        
+            var validationResult = await validator.ValidateAsync(request, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                return new ServiceResponse<AccountDto>
+                {
+                    Status = ServiceStatus.Invalid,
+                    Message = validationResult.Errors.First().ErrorMessage
+                };           
+            }
+            
+            var createdAccount = await accountRepository.CreateAsync(request, cancellationToken);
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return new ServiceResponse<AccountDto>
             {
-                Data = account,
+                Data = createdAccount,
                 Message = "Account created successfully",
                 Status = ServiceStatus.Success
             };

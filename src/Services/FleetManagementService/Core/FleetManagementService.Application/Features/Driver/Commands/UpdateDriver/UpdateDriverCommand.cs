@@ -1,6 +1,10 @@
+using MediatR;
+using Services.Core.Models.Service;
+
 namespace FleetManagementService.Application.Features.Driver.Commands.UpdateDriver;
 
-public record UpdateDriverCommand
-{
-    public required string Name { get; init; }
-}
+public record UpdateDriverCommand(
+    Guid Id,
+    Guid AccountId,
+    string FirstName,
+    string LastName) : IRequest<ServiceResponse<Unit>>;

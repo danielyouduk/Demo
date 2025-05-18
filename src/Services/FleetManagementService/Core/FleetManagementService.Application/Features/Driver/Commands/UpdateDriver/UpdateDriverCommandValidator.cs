@@ -1,12 +1,14 @@
+using FleetManagementService.Application.Features.Driver.Commands.CreateDriver;
 using FleetManagementService.Application.Validation;
 using FleetManagementService.Application.Validation.BaseValidation;
 using FluentValidation;
 
-namespace FleetManagementService.Application.Features.Driver.Commands.CreateDriver;
+namespace FleetManagementService.Application.Features.Driver.Commands.UpdateDriver;
 
-public class CreateDriverCommandValidator : BaseValidator<CreateDriverCommand>
+public class UpdateDriverCommandValidator : BaseValidator<UpdateDriverCommand>
 {
-    public CreateDriverCommandValidator(AccountByIdMustExistAsync accountByIdMustExistAsync)
+    public UpdateDriverCommandValidator(
+        AccountByIdMustExistAsync accountByIdMustExistAsync)
     {
         RuleFor(command => command.FirstName)
             .Length(0, 50)

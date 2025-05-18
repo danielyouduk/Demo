@@ -3,6 +3,7 @@ using FleetManagementService.Application.Contracts.Persistence;
 using FleetManagementService.Application.Contracts.Persistence.Common;
 using MassTransit;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Services.Core.Enums;
 using Services.Core.Events.DriverEvents;
 using Services.Core.Models.Service;
@@ -14,6 +15,7 @@ public class CreateDriverCommandHandler(
     IDriverRepository driverCommandRepository,
     IUnitOfWork unitOfWork,
     IMapper mapper,
+    ILogger<CreateDriverCommandHandler> logger,
     IPublishEndpoint publishEndpoint) : IRequestHandler<CreateDriverCommand, ServiceResponse<Guid>>
 {
     public async Task<ServiceResponse<Guid>> Handle(CreateDriverCommand request, CancellationToken cancellationToken)
@@ -29,7 +31,7 @@ public class CreateDriverCommandHandler(
 
         try
         {
-            var driver = await driverCommandRepository.CreateAsync(request);
+            var driver = await driverCommandRepository.CreateAsync(request, cancellationToken);
             
             await unitOfWork.SaveChangesAsync(cancellationToken);
             
@@ -42,13 +44,15 @@ public class CreateDriverCommandHandler(
                 Message = $"Successfully created driver {driver.FirstName} {driver.LastName}."
             };
         }
-        catch (Exception)
+        catch (OperationCanceledException)
         {
-            return new ServiceResponse<Guid>
-            {
-                Status = ServiceStatus.Failure,
-                Message = $"An error occurred while creating the driver {request.FirstName} {request.LastName}."
-            };
+            throw;
+        }
+        catch (Exception e)
+        {
+            // todo: Add Exception log message for CreateDriverCommandHandler.Handle
+            logger.LogError(e, string.Empty, request);
+            throw;
         }
     }
 }

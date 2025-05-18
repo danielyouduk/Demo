@@ -197,11 +197,10 @@ public class AccountsController(
         }
         catch (ValidationException e)
         {
-            return BadRequest(new ServiceResponse<AccountDto>
+            return BadRequest(new ServiceResponse<Unit>
             {
                 Status = ServiceStatus.Invalid,
-                Message = e.Message,
-                Data = null
+                Message = e.Message
             });
         }
         catch (OperationCanceledException)
@@ -213,11 +212,10 @@ public class AccountsController(
             // todo: Add Exception log message for AccountsController.UpdateAccount
             logger.LogError(e, string.Empty, updateAccountCommand);
             
-            return BadRequest(new ServiceResponse<AccountDto> 
+            return BadRequest(new ServiceResponse<Unit> 
             { 
                 Status = ServiceStatus.Failure, 
-                Message = "Error processing request",
-                Data = null
+                Message = "Error processing request"
             });
         }
     }

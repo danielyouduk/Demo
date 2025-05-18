@@ -1,64 +1,173 @@
 using AutoMapper;
 using FleetManagementService.Application.Contracts.Persistence;
 using FleetManagementService.Application.Features.Driver.Commands.CreateDriver;
+using FleetManagementService.Application.Features.Driver.Commands.UpdateDriver;
 using FleetManagementService.Application.Features.Driver.Shared;
 using FleetManagementService.Domain.Entities;
 using FleetManagementService.Persistence.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Services.Core.Helpers;
 using Services.Core.Models;
 
 namespace FleetManagementService.Persistence.Repositories;
 
-public class DriverRepository(FleetManagementDatabaseContext context, IMapper mapper) : IDriverRepository
+public class DriverRepository(
+    FleetManagementDatabaseContext context,
+    ILogger<DriverRepository> logger,
+    IMapper mapper) : IDriverRepository
 {
-    public async Task<BasePagedResult<DriverDto>> GetDriversAsync(PagedRequestQuery pagedRequestQuery)
+    public async Task<BasePagedResult<DriverDto>> GetDriversAsync(PagedRequestQuery pagedRequestQuery, CancellationToken cancellationToken)
     {
-        // Base query
-        var query = context.Drivers
-            .AsQueryable();
-        
-        // Apply sorting
-        query = OrderingHelper.ApplyOrdering(query, pagedRequestQuery.SortBy, pagedRequestQuery.SortDescending);
-        
-        // Execute the query with pagination
-        var queryCount = await query.CountAsync();
-        
-        // Apply pagination
-        var drivers = await query.ApplyPaging(pagedRequestQuery)
-            .ToListAsync();
-        
-        // Map and return the final result
-        return new BasePagedResult<DriverDto>
+        try
         {
-            Data = mapper.Map<IReadOnlyCollection<DriverDto>>(drivers),
-            TotalRecords = queryCount
-        };
+            // Base query
+            var query = context.Drivers.AsQueryable();
+        
+            // Apply sorting
+            if (!string.IsNullOrEmpty(pagedRequestQuery.SortBy))
+            {
+                query = OrderingHelper.ApplyOrdering(query, pagedRequestQuery.SortBy, pagedRequestQuery.SortDescending);
+            }
+
+            // Execute the query with pagination
+            var queryCount = await query.CountAsync(cancellationToken);
+            
+            if (queryCount == 0)
+            {
+                return new BasePagedResult<DriverDto>
+                {
+                    Data = Array.Empty<DriverDto>(),
+                    TotalRecords = 0
+                };
+            }
+        
+            // Apply pagination
+            var drivers = await query
+                .ApplyPaging(pagedRequestQuery)
+                .ToListAsync(cancellationToken);
+            
+            // Map and return the final result
+            var mappedDrivers = mapper.Map<IReadOnlyCollection<DriverDto>>(drivers);
+            return new BasePagedResult<DriverDto>
+            {
+                Data = mappedDrivers,
+                TotalRecords = queryCount
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception e)
+        {
+            // todo: Add Exception log message for DriverRepository.GetDriversAsync
+            logger.LogError(e, string.Empty, pagedRequestQuery);
+            throw;
+        }
     }
 
-    public async Task<DriverDto> GetDriverByIdAsync(Guid id)
+    public async Task<DriverDto?> GetDriverByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var driver = await context.Drivers.FirstOrDefaultAsync(driver => driver.Id == id);
+        if (id == Guid.Empty)
+        {
+            // todo: Add ArgumentException message for DriverRepository.GetDriverByIdAsync
+            throw new ArgumentException(string.Empty, nameof(id));
+        }
 
-        return mapper.Map<DriverDto>(driver);
+        try
+        {
+            var driver = await context.Drivers.AsNoTracking()
+                .FirstOrDefaultAsync(driver => driver.Id == id, cancellationToken);
+
+            return driver != null ? mapper.Map<DriverDto>(driver) : null;
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception e)
+        {
+            // todo: Add Exception log message for DriverRepository.GetDriverByIdAsync
+            logger.LogError(e, string.Empty, id);
+            throw;
+        }
     }
     
-    public async Task<DriverDto> CreateAsync(CreateDriverCommand createDriverCommand)
+    public async Task<DriverDto> CreateAsync(CreateDriverCommand createDriverCommand, CancellationToken cancellationToken)
     {
-        var entity = mapper.Map<Driver>(createDriverCommand);
+        ArgumentNullException.ThrowIfNull(createDriverCommand);
+
+        try
+        {
+            var entity = mapper.Map<Driver>(createDriverCommand);
         
-        var now = DateTime.UtcNow;
-        entity.CreatedAt = now;
-        entity.UpdatedAt = now;
-        entity.IsActive = true;
+            await context.AddAsync(entity, cancellationToken);
         
-        await context.AddAsync(entity);
-        
-        return mapper.Map<DriverDto>(entity);
+            return mapper.Map<DriverDto>(entity);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception e)
+        {
+            // todo: Add Exception log message for DriverRepository.CreateAsync
+            logger.LogError(e, string.Empty, createDriverCommand.FirstName);
+            throw;
+        }
     }
 
-    public Task UpdateDriver(object driver)
+    public async Task<bool> UpdateDriverAsync(UpdateDriverCommand command, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(command);
+
+        try
+        {
+            var existingDriver = await context.Drivers
+                .FirstOrDefaultAsync(a => a.Id == command.Id, cancellationToken);
+            
+            if (existingDriver == null)
+            {
+                return false;
+            }
+
+            mapper.Map(command, existingDriver);
+            
+            context.Entry(existingDriver).Property(p => p.CreatedAt).IsModified = false;
+            context.Update(existingDriver);
+
+            return true;
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception e)
+        {
+            // todo: Add Exception log message for DriverRepository.UpdateDriver
+            logger.LogError(e, string.Empty, command.FirstName);
+            throw;
+        }
+    }
+
+    public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            return await context.Drivers
+                .AsNoTracking()
+                .AnyAsync(driver => driver.Id == id, cancellationToken);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception e)
+        {
+            // todo: Add Exception log message for DriverRepository.ExistsAsync
+            logger.LogError(e, string.Empty, id);
+            throw;
+        }
     }
 }

@@ -1,50 +1,48 @@
 using FleetManagementService.Application.Contracts.Persistence;
-using FleetManagementService.Application.Features.Driver.Shared;
+using FleetManagementService.Application.Contracts.Persistence.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Services.Core.Enums;
 using Services.Core.Models.Service;
 
-namespace FleetManagementService.Application.Features.Driver.Queries.GetDriver;
+namespace FleetManagementService.Application.Features.Driver.Commands.UpdateDriver;
 
-public class GetDriverQueryHandler(
+public class UpdateDriverCommandHandler(
     IDriverRepository driverRepository,
-    GetDriverQueryValidator validator,
-    ILogger<GetDriverQueryHandler> logger) 
-    : IRequestHandler<GetDriverQuery, ServiceResponse<DriverDto>>
+    UpdateDriverCommandValidator validator,
+    ILogger<UpdateDriverCommandHandler> logger,
+    IUnitOfWork unitOfWork) : IRequestHandler<UpdateDriverCommand, ServiceResponse<Unit>>
 {
-    public async Task<ServiceResponse<DriverDto>> Handle(
-        GetDriverQuery request, CancellationToken cancellationToken)
+    public async Task<ServiceResponse<Unit>> Handle(UpdateDriverCommand request, CancellationToken cancellationToken)
     {
         try
         {
             var validationResult = await validator.ValidateAsync(request, cancellationToken);
             if (!validationResult.IsValid)
             {
-                return new ServiceResponse<DriverDto>
+                return new ServiceResponse<Unit>
                 {
                     Status = ServiceStatus.Invalid,
                     Message = validationResult.Errors.First().ErrorMessage
                 };           
             }
             
-            var driver = await driverRepository.GetDriverByIdAsync(request.Id, cancellationToken);
-            
-            if (driver == null)
+            var updated = await driverRepository.UpdateDriverAsync(request, cancellationToken);
+            if (!updated)
             {
-                return new ServiceResponse<DriverDto>
+                return new ServiceResponse<Unit>
                 {
                     Status = ServiceStatus.NotFound,
-                    Message = $"Driver with ID {request.Id} not found",
-                    Data = null
+                    Message = "Driver not found"
                 };
             }
             
-            return new ServiceResponse<DriverDto>
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+        
+            return new ServiceResponse<Unit>
             {
-                Data = driver,
                 Status = ServiceStatus.Success,
-                Message = "Success"
+                Message = "Driver updated successfully"
             };
         }
         catch (OperationCanceledException)
@@ -53,7 +51,7 @@ public class GetDriverQueryHandler(
         }
         catch (Exception e)
         {
-            // todo: Add Exception log message for GetDriverQueryHandler.Handle
+            // todo: Add Exception log message for UpdateDriverCommandHandler.Handle
             logger.LogError(e, string.Empty, request);
             throw;
         }
