@@ -1,4 +1,3 @@
-using FleetManagementService.Application.Features.Account.Shared;
 using FleetManagementService.Application.Features.Vehicle.Commands.CreateVehicle;
 using FleetManagementService.Application.Features.Vehicle.Queries.GetVehicle;
 using FleetManagementService.Application.Features.Vehicle.Queries.GetVehicles;
