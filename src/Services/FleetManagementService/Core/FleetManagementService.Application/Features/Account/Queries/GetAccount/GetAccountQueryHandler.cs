@@ -9,6 +9,7 @@ namespace FleetManagementService.Application.Features.Account.Queries.GetAccount
 
 public class GetAccountQueryHandler(
     IAccountRepository accountRepository,
+    GetAccountQueryValidator validator,
     ILogger<GetAccountQueryHandler> logger) 
     : IRequestHandler<GetAccountQuery, ServiceResponse<AccountDto>>
 {
@@ -16,6 +17,15 @@ public class GetAccountQueryHandler(
     {
         try
         {
+            var validationResult = await validator.ValidateAsync(request, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                return new ServiceResponse<AccountDto>
+                {
+                    Status = ServiceStatus.Invalid,
+                    Message = validationResult.Errors.First().ErrorMessage
+                };           
+            }
             var account = await accountRepository.GetAccountByIdAsync(request.Id, cancellationToken);
 
             if (account == null)
@@ -34,6 +44,10 @@ public class GetAccountQueryHandler(
                 Message = "Account retrieved successfully",
                 Data = account
             };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
         }
         catch (Exception e)
         {

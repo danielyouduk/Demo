@@ -18,8 +18,26 @@ public class UpdateAccountCommandHandler(
     {
         try
         {
-            await validator.ValidateAsync(request, cancellationToken);
-            await accountRepository.UpdateAsync(request, cancellationToken);
+            var validationResult = await validator.ValidateAsync(request, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                return new ServiceResponse<Unit>
+                {
+                    Status = ServiceStatus.Invalid,
+                    Message = validationResult.Errors.First().ErrorMessage
+                };           
+            }
+            
+            var updated = await accountRepository.UpdateAsync(request, cancellationToken);
+            if (!updated)
+            {
+                return new ServiceResponse<Unit>
+                {
+                    Status = ServiceStatus.NotFound,
+                    Message = "Account not found"
+                };
+            }
+            
             await unitOfWork.SaveChangesAsync(cancellationToken);
         
             return new ServiceResponse<Unit>
@@ -27,6 +45,10 @@ public class UpdateAccountCommandHandler(
                 Status = ServiceStatus.Success,
                 Message = "Account updated successfully"
             };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
         }
         catch (Exception e)
         {

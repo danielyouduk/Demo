@@ -34,6 +34,10 @@ public class CreateAccountCommandHandler(
                 Status = ServiceStatus.Success
             };
         }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
         catch (Exception e)
         {
             // todo: Add Exception log message for CreateAccountCommandHandler.Handle

@@ -13,10 +13,7 @@ public class AccountByIdMustExistAsync(
     {
         try
         {
-            if (!await accountRepository.ExistsAsync(accountId, cancellationToken))
-                throw new NotFoundException("Account", accountId);
-
-            return true;
+            return await accountRepository.ExistsAsync(accountId, cancellationToken);
         }
         catch (OperationCanceledException)
         {

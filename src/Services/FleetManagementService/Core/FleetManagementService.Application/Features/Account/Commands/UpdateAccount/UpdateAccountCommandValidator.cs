@@ -9,27 +9,25 @@ public class UpdateAccountCommandValidator : BaseValidator<UpdateAccountCommand>
     public UpdateAccountCommandValidator(
         AccountByIdMustExistAsync accountByIdMustExistAsync)
     {
-        // Existing ID validation
-        RuleFor(command => command.Id)
-            .NotEmpty()
-            .WithMessage("Account ID is required")
-            .MustAsync(async (id, cancellationToken) => 
-                await accountByIdMustExistAsync.ValidateAsync(id))
-            .WithMessage("Account with specified ID does not exist");
-
         // CompanyName validation
         RuleFor(command => command.CompanyName)
             .Length(0, 50)
             .WithMessage("Company name must be between 0 and 50 characters");
-        
+    
         // CompanyVatNumber validation
         RuleFor(command => command.CompanyVatNumber)
             .Length(0, 11)
             .WithMessage("Company VAT number must be between 0 and 11 characters");
-        
+    
         // BillingAddressId validation
         RuleFor(command => command.BillingAddressId)
             .Must(billingAddressId => billingAddressId == null || billingAddressId != Guid.Empty)
             .WithMessage("BillingAddressId must not be an empty GUID");
+
+        // Database existence check
+        RuleFor(command => command.Id)
+            .MustAsync(async (id, cancellationToken) => 
+                await accountByIdMustExistAsync.ValidateAsync(id, cancellationToken))
+            .WithMessage("Account with specified ID does not exist");
     }
 }
