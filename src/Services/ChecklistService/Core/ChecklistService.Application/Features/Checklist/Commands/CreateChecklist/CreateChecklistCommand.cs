@@ -1,10 +1,9 @@
-using ChecklistService.Application.Features.Checklist.Shared;
 using MediatR;
 using Services.Core.Models.Service;
 
 namespace ChecklistService.Application.Features.Checklist.Commands.CreateChecklist;
 
-public record CreateChecklistCommand : IRequest<ServiceResponse<ChecklistDto>>
+public record CreateChecklistCommand : IRequest<ServiceResponse<Guid>>
 {
     public Guid id { get; set; }
     
@@ -13,8 +12,4 @@ public record CreateChecklistCommand : IRequest<ServiceResponse<ChecklistDto>>
     public string Title { get; init; }
 
     public bool IsSubmitted { get; set; } = false;
-    
-    public DateTime CreatedAt { get; set; }
-    
-    public DateTime UpdatedAt { get; set; }
 }

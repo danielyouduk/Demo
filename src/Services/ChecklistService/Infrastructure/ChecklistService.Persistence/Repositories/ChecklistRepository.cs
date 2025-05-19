@@ -6,10 +6,14 @@ using ChecklistService.Application.Features.Checklist.Commands.UpdateChecklist;
 using ChecklistService.Application.Features.Checklist.Shared;
 using ChecklistService.Domain.Entities;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Logging;
+using Services.Core.Models;
 
 namespace ChecklistService.Persistence.Repositories;
 
-public class ChecklistRepository(CosmosClient client) : IChecklistRepository
+public class ChecklistRepository(
+    CosmosClient client,
+    ILogger<ChecklistRepository> logger) : IChecklistRepository
 {
     private Container GetContainer()
     {
@@ -17,7 +21,45 @@ public class ChecklistRepository(CosmosClient client) : IChecklistRepository
         return database.GetContainer("Checklists");
     }
 
-    public async Task<ChecklistDto> CreateChecklistAsync(CreateChecklistCommand checklist)
+    public async Task<BasePagedResult<ChecklistDto>> GetChecklistsAsync(PagedRequestQuery pagedRequestQuery, CancellationToken cancellationToken)
+    {
+        try
+        {
+            // todo: Implement ChecklistRepository.GetChecklistsAsync
+            throw new NotImplementedException();
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception e)
+        {
+            // todo: Add Exception log message for ChecklistRepository.GetChecklistsAsync
+            logger.LogError(e, string.Empty, pagedRequestQuery);
+            throw;
+        }
+    }
+
+    public async Task<ChecklistDto?> GetChecklistByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            // todo: Implement ChecklistRepository.GetChecklistByIdAsync
+            throw new NotImplementedException();
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception e)
+        {
+            // todo: Add Exception log message for ChecklistRepository.GetChecklistByIdAsync
+            logger.LogError(e, string.Empty, id);
+            throw;
+        }
+    }
+
+    public async Task<ChecklistDto> CreateChecklistAsync(CreateChecklistCommand checklist, CancellationToken cancellationToken)
     {
         var container = GetContainer();
         var now = DateTime.UtcNow;
@@ -34,7 +76,8 @@ public class ChecklistRepository(CosmosClient client) : IChecklistRepository
         
         var response = await container.UpsertItemAsync<Checklist>(
             item: entity,
-            partitionKey: new PartitionKey(entity.AccountId.ToString())
+            partitionKey: new PartitionKey(entity.AccountId.ToString()),
+            cancellationToken: cancellationToken
         );
         
         return new ChecklistDto
@@ -48,12 +91,12 @@ public class ChecklistRepository(CosmosClient client) : IChecklistRepository
 
     }
 
-    public async Task UpdateChecklistAsync(UpdateChecklistCommand checklist)
+    public async Task UpdateChecklistAsync(UpdateChecklistCommand checklist, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public async Task SubmitChecklistAsync(SubmitChecklistCommand command)
+    public async Task SubmitChecklistAsync(SubmitChecklistCommand command, CancellationToken cancellationToken)
     {
         var container = GetContainer();
 
@@ -82,7 +125,7 @@ public class ChecklistRepository(CosmosClient client) : IChecklistRepository
         
     }
 
-    public async Task DeleteChecklistAsync(DeleteChecklistCommand checklist)
+    public async Task DeleteChecklistAsync(DeleteChecklistCommand checklist, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
