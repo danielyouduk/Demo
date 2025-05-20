@@ -2,6 +2,7 @@ using System.Reflection;
 using FleetManagementService.Application.Validation.BaseValidation;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using Services.Core.Validation;
 
 namespace FleetManagementService.Application.Extensions;
 
@@ -13,8 +14,9 @@ public static class ApplicationServiceRegistrationExtension
         services.AddMediatR(cfg => 
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         
-        services.AddValidatorsFromAssemblyContaining<BaseValidator<object>>();
-        
+        services.AddValidatorsFromAssemblyContaining<FleetManagementValidator<object>>();
+        services.AddScoped<PagedRequestQueryValidator>();
+
         return services;
     }
 }

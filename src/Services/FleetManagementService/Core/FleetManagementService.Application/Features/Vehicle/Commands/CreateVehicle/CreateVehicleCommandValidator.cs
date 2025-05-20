@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace FleetManagementService.Application.Features.Vehicle.Commands.CreateVehicle;
 
-public class CreateVehicleCommandValidator : BaseValidator<CreateVehicleCommand>
+public class CreateVehicleCommandValidator : FleetManagementValidator<CreateVehicleCommand>
 {
     public CreateVehicleCommandValidator(AccountByIdMustExistAsync accountByIdMustExistAsync)
     {

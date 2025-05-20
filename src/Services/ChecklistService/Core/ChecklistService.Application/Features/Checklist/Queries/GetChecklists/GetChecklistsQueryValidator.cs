@@ -1,9 +1,10 @@
+using ChecklistService.Application.Validation.BaseValidation;
 using FleetManagementService.Application.Validation;
-using FleetManagementService.Application.Validation.BaseValidation;
+using Services.Core.Validation;
 
 namespace ChecklistService.Application.Features.Checklist.Queries.GetChecklists;
 
-public class GetChecklistsQueryValidator : BaseValidator<GetChecklistsQuery>
+public class GetChecklistsQueryValidator : ChecklistValidator<GetChecklistsQuery>
 {
     public GetChecklistsQueryValidator(
         PagedRequestQueryValidator pagedRequestQueryValidator)

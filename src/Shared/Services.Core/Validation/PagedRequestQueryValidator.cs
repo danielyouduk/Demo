@@ -1,10 +1,9 @@
-using FleetManagementService.Application.Validation.BaseValidation;
 using FluentValidation;
 using Services.Core.Models;
 
-namespace FleetManagementService.Application.Validation;
+namespace Services.Core.Validation;
 
-public class PagedRequestQueryValidator : BaseValidator<PagedRequestQuery>
+public class PagedRequestQueryValidator : AbstractValidator<PagedRequestQuery>
 {
     public PagedRequestQueryValidator()
     {

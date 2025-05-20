@@ -22,4 +22,8 @@
       <ProjectReference Include="..\FleetManagementService.Domain\FleetManagementService.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Validation\BaseValidation\" />
+    </ItemGroup>
+
 </Project>

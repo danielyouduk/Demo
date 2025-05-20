@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace FleetManagementService.Application.Features.Account.Commands.UpdateAccount;
 
-public class UpdateAccountCommandValidator : BaseValidator<UpdateAccountCommand>
+public class UpdateAccountCommandValidator : FleetManagementValidator<UpdateAccountCommand>
 {
     public UpdateAccountCommandValidator(
         AccountByIdMustExistAsync accountByIdMustExistAsync)

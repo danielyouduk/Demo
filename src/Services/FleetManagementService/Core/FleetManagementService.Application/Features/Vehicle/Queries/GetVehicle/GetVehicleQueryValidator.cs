@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace FleetManagementService.Application.Features.Vehicle.Queries.GetVehicle;
 
-public class GetVehicleQueryValidator : BaseValidator<GetVehicleQuery>
+public class GetVehicleQueryValidator : FleetManagementValidator<GetVehicleQuery>
 {
     public GetVehicleQueryValidator(
         VehicleByIdMustExistAsync vehicleByIdMustExistAsync)

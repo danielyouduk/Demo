@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace FleetManagementService.Application.Features.Account.Queries.GetAccount;
 
-public class GetAccountQueryValidator : BaseValidator<GetAccountQuery>
+public class GetAccountQueryValidator : FleetManagementValidator<GetAccountQuery>
 {
     public GetAccountQueryValidator(
         AccountByIdMustExistAsync accountByIdMustExistAsync)

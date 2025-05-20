@@ -1,9 +1,9 @@
-using FleetManagementService.Application.Validation.BaseValidation;
+using ChecklistService.Application.Validation.BaseValidation;
 using FluentValidation;
 
 namespace ChecklistService.Application.Features.Checklist.Commands.DeleteChecklist;
 
-public class DeleteChecklistCommandValidator : BaseValidator<DeleteChecklistCommand>
+public class DeleteChecklistCommandValidator : ChecklistValidator<DeleteChecklistCommand>
 {
     public DeleteChecklistCommandValidator()
     {

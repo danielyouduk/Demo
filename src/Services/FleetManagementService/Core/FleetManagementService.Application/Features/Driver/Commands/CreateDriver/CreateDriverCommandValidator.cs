@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace FleetManagementService.Application.Features.Driver.Commands.CreateDriver;
 
-public class CreateDriverCommandValidator : BaseValidator<CreateDriverCommand>
+public class CreateDriverCommandValidator : FleetManagementValidator<CreateDriverCommand>
 {
     public CreateDriverCommandValidator(AccountByIdMustExistAsync accountByIdMustExistAsync)
     {

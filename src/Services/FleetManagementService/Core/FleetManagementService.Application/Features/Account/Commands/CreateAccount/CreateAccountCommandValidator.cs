@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace FleetManagementService.Application.Features.Account.Commands.CreateAccount;
 
-public class CreateAccountCommandValidator : BaseValidator<CreateAccountCommand>
+public class CreateAccountCommandValidator : FleetManagementValidator<CreateAccountCommand>
 {
     public CreateAccountCommandValidator()
     {

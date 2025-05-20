@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace FleetManagementService.Application.Features.Driver.Queries.GetDriver;
 
-public class GetDriverQueryValidator : BaseValidator<GetDriverQuery>
+public class GetDriverQueryValidator : FleetManagementValidator<GetDriverQuery>
 {
     public GetDriverQueryValidator(
         DriverByIdMustExistAsync driverByIdMustExistAsync)

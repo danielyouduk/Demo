@@ -88,6 +88,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{3C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetManagementService.Application.UnitTests", "tests\Demo.UnitTests\Services\FleetManagementService.Application.UnitTests\FleetManagementService.Application.UnitTests.csproj", "{B711EB17-EE75-411E-9C3B-6D81465AF0AF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{E22EDC5B-B06E-41AD-AD49-D29CC4CF5C8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -136,6 +138,7 @@ Global
 		{0DC3BFCD-0EB1-4AB6-9ADC-416C86D74886} = {6CF03E11-3BA0-4BB5-A893-83A84F085C45}
 		{3C37631E-9F25-4155-AAD5-64F4FB2352D2} = {0DC3BFCD-0EB1-4AB6-9ADC-416C86D74886}
 		{B711EB17-EE75-411E-9C3B-6D81465AF0AF} = {3C37631E-9F25-4155-AAD5-64F4FB2352D2}
+		{E22EDC5B-B06E-41AD-AD49-D29CC4CF5C8F} = {4832FE58-B6BC-480F-BEED-6E1335612A61}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5A2FE364-D5D6-4AA7-AD20-ECE4C30F68BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

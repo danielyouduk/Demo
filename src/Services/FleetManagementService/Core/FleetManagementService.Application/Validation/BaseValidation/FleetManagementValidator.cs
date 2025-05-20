@@ -2,4 +2,4 @@ using FluentValidation;
 
 namespace FleetManagementService.Application.Validation.BaseValidation;
 
-public class BaseValidator<T> : AbstractValidator<T>;
+public class FleetManagementValidator<T> : AbstractValidator<T>;

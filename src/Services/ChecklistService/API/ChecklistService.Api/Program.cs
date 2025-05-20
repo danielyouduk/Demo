@@ -1,6 +1,7 @@
 using ChecklistService.Application.Extensions;
 using ChecklistService.Application.Settings;
 using ChecklistService.Persistence.Extensions;
+using Serilog;
 using Services.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,12 @@ var appConfig = builder.Services.AddApplicationConfiguration<ChecklistServiceCon
 
 builder.Services.AddSingleton(appConfig);
 builder.Services.AddControllers();
+
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .WriteTo.File("logs/fleetmanagement-.txt", rollingInterval: RollingInterval.Day)
+);
 
 builder.Services
     .AddApplicationServices()
