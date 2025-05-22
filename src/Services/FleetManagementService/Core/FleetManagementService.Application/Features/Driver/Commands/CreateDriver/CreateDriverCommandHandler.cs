@@ -46,6 +46,7 @@ public class CreateDriverCommandHandler(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(Handle));
             throw;
         }
         catch (Exception e)

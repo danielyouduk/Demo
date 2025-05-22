@@ -58,38 +58,5 @@ public class DriverConfiguration : BaseConfiguration<Driver>
 
         var drivers = faker.Generate(80);
         builder.HasData(drivers);
-
-        
-        // builder.HasData(
-        //     new Driver
-        //     {
-        //         Id = new Guid("BD1F9CF1-145B-44B1-A4E2-7EB9A3482AB4"),
-        //         AccountId = new Guid("3F21CAE9-E777-425A-8BA5-DC15782A232D"),
-        //         FirstName = "Driver",
-        //         LastName = "One",
-        //         IsActive = true,
-        //         CreatedAt = DateTime.UtcNow,
-        //         UpdatedAt = DateTime.UtcNow
-        //     },
-        //     new Driver
-        //     {
-        //         Id = new Guid("9DF3329B-1F4A-41E1-96D0-D5B6B46C4BFB"),
-        //         AccountId = new Guid("3F21CAE9-E777-425A-8BA5-DC15782A232D"),
-        //         FirstName = "Driver",
-        //         LastName = "Two",
-        //         IsActive = false,
-        //         CreatedAt = DateTime.UtcNow,
-        //         UpdatedAt = DateTime.UtcNow
-        //     },
-        //     new Driver
-        //     {
-        //         Id = new Guid("660D6B04-E73C-4F69-B16F-720CCA159DEC"),
-        //         AccountId = new Guid("0C49E8CE-7884-4665-8591-CB8CA9AFAF34"),
-        //         FirstName = "Driver",
-        //         LastName = "Three",
-        //         IsActive = true,
-        //         CreatedAt = DateTime.UtcNow,
-        //         UpdatedAt = DateTime.UtcNow
-        //     });
     }
 }

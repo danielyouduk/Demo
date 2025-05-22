@@ -40,6 +40,7 @@ public class GetVehiclesQueryHandler(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(Handle));
             throw;
         }
         catch (Exception e)

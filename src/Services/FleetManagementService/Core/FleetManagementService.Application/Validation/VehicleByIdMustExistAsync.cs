@@ -16,6 +16,7 @@ public class VehicleByIdMustExistAsync(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(ValidateAsync));
             throw;
         }
         catch (Exception e)

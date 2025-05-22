@@ -16,6 +16,7 @@ public class DriverByIdMustExistAsync(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(ValidateAsync));
             throw;
         }
         catch (Exception e)

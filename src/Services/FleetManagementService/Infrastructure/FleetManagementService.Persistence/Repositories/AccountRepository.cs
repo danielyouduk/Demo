@@ -61,6 +61,7 @@ public class AccountRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(GetAccountsAsync));
             throw;
         }
         catch (Exception e)
@@ -88,6 +89,7 @@ public class AccountRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(GetAccountByIdAsync));
             throw;
         }
         catch (Exception e)
@@ -112,6 +114,7 @@ public class AccountRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(CreateAsync));
             throw;
         }
         catch (Exception e)
@@ -145,6 +148,7 @@ public class AccountRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(UpdateAsync));
             throw;
         }
         catch (Exception e)
@@ -165,6 +169,7 @@ public class AccountRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(ExistsAsync));
             throw;
         }
         catch (Exception e)
@@ -199,6 +204,7 @@ public class AccountRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(UpdateChecklistCreated));
             throw;
         }
         catch (Exception ex)
@@ -231,6 +237,7 @@ public class AccountRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(UpdateChecklistSubmitted));
             throw;
         }
         catch (Exception e)
