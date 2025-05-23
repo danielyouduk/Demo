@@ -58,6 +58,7 @@ public class DriverRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(GetDriversAsync));
             throw;
         }
         catch (Exception e)
@@ -85,6 +86,7 @@ public class DriverRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(GetDriverByIdAsync));
             throw;
         }
         catch (Exception e)
@@ -109,6 +111,7 @@ public class DriverRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(CreateAsync));
             throw;
         }
         catch (Exception e)
@@ -142,6 +145,7 @@ public class DriverRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(UpdateDriverAsync));
             throw;
         }
         catch (Exception e)
@@ -162,6 +166,7 @@ public class DriverRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(ExistsAsync));
             throw;
         }
         catch (Exception e)

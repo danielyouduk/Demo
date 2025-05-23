@@ -57,6 +57,7 @@ public class VehicleRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(GetVehiclesAsync));
             throw;
         }
         catch (Exception e)
@@ -84,6 +85,7 @@ public class VehicleRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(GetVehicleByIdAsync));
             throw;
         }
         catch (Exception e)
@@ -108,6 +110,7 @@ public class VehicleRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(CreateAsync));
             throw;
         }
         catch (Exception e)
@@ -128,6 +131,7 @@ public class VehicleRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(ExistsAsync));
             throw;
         }
         catch (Exception e)

@@ -68,28 +68,5 @@ public class AccountConfiguration : BaseConfiguration<Account>
 
         var accounts = faker.Generate(2);
         builder.HasData(accounts);
-        //     
-        //     
-        // builder.HasData(
-        //     new Account
-        //     {
-        //         Id = new Guid("3F21CAE9-E777-425A-8BA5-DC15782A232D"),
-        //         CompanyName = "Company Account One",
-        //         CompanyVatNumber = "123456789",
-        //         BillingAddressId = new Guid("75E08289-B556-44EE-83DA-181AB8642D98"),
-        //         IsActive = true,
-        //         CreatedAt = DateTime.UtcNow,
-        //         UpdatedAt = DateTime.UtcNow
-        //     },
-        //     new Account
-        //     {
-        //         Id = new Guid("0C49E8CE-7884-4665-8591-CB8CA9AFAF34"),
-        //         CompanyName = "Company Account Two",
-        //         CompanyVatNumber = "987654321",
-        //         BillingAddressId = new Guid("D9B0CA63-A27C-4F56-8DD2-A8844C36E1C8"),
-        //         IsActive = true,
-        //         CreatedAt = DateTime.UtcNow,
-        //         UpdatedAt = DateTime.UtcNow
-        //     });
     }
 }

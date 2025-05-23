@@ -30,6 +30,7 @@ public class ChecklistRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(GetChecklistsAsync));
             throw;
         }
         catch (Exception e)
@@ -49,6 +50,7 @@ public class ChecklistRepository(
         }
         catch (OperationCanceledException)
         {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(GetChecklistByIdAsync));
             throw;
         }
         catch (Exception e)
@@ -64,31 +66,43 @@ public class ChecklistRepository(
         var container = GetContainer();
         var now = DateTime.UtcNow;
 
-        var entity = new Checklist
+        try
         {
-            id = checklist.id,
-            AccountId = checklist.AccountId,
-            Title = checklist.Title,
-            CreatedAt = now,
-            UpdatedAt = now,
-            IsSubmitted = false
-        };
+            var entity = new Checklist
+            {
+                id = checklist.id,
+                AccountId = checklist.AccountId,
+                Title = checklist.Title,
+                CreatedAt = now,
+                UpdatedAt = now,
+                IsSubmitted = false
+            };
         
-        var response = await container.UpsertItemAsync<Checklist>(
-            item: entity,
-            partitionKey: new PartitionKey(entity.AccountId.ToString()),
-            cancellationToken: cancellationToken
-        );
+            var response = await container.UpsertItemAsync<Checklist>(
+                item: entity,
+                partitionKey: new PartitionKey(entity.AccountId.ToString()),
+                cancellationToken: cancellationToken
+            );
         
-        return new ChecklistDto
+            return new ChecklistDto
+            {
+                Id = response.Resource.id,
+                AccountId = response.Resource.AccountId,
+                Title = response.Resource.Title,
+                CreatedAt = response.Resource.CreatedAt,
+                UpdatedAt = response.Resource.UpdatedAt
+            };
+        }
+        catch (OperationCanceledException)
         {
-            Id = response.Resource.id,
-            AccountId = response.Resource.AccountId,
-            Title = response.Resource.Title,
-            CreatedAt = response.Resource.CreatedAt,
-            UpdatedAt = response.Resource.UpdatedAt
-        };
-
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(CreateChecklistAsync));
+            throw;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public async Task UpdateChecklistAsync(UpdateChecklistCommand checklist, CancellationToken cancellationToken)
@@ -117,6 +131,11 @@ public class ChecklistRepository(
                 id: entity.id.ToString(),
                 partitionKey:
                 new PartitionKey(entity.AccountId.ToString()));
+        }
+        catch (OperationCanceledException)
+        {
+            logger.LogInformation("Operation '{Operation}' was cancelled", nameof(SubmitChecklistAsync));
+            throw;
         }
         catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
