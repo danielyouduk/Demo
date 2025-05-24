@@ -8,17 +8,22 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    loadChildren: () => import('./features/dashboard/dashboard-routes')
-      .then(m => m.dashboardRoutes)
+    loadChildren: () => import('./features/dashboard/dashboard.module')
+      .then(m => m.DashboardModule)
   },
   {
     path: 'account',
-    loadChildren: () => import('./features/account/account-routes')
-      .then(m => m.accountRoutes)
+    loadChildren: () => import('./features/account/account.module')
+      .then(m => m.AccountModule)
   },
   {
     path: 'auth',
-    loadChildren: () => import('./features/auth/auth-routes')
-      .then(m => m.authRoutes)
+    loadChildren: () => import('./features/auth/auth.module')
+      .then(m => m.AuthModule)
+  },
+  {
+    path: 'vehicles',
+    loadChildren: () => import('./features/vehicles/vehicles.module')
+      .then(m => m.VehiclesModule)
   }
 ];

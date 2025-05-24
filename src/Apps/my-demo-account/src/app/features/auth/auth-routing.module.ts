@@ -1,10 +1,11 @@
-import { Routes } from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './pages/login/login.component';
 import {RegisterComponent} from './pages/register/register.component';
 import {ForgotPasswordComponent} from './pages/forgot-password/forgot-password.component';
 import {PasswordResetComponent} from './pages/password-reset/password-reset.component';
+import {NgModule} from '@angular/core';
 
-export const authRoutes: Routes = [
+const routes: Routes = [
   {
     path: '',
     redirectTo: 'login',
@@ -31,3 +32,9 @@ export const authRoutes: Routes = [
     title: 'Password Reset'
   }
 ];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class AuthRoutingModule { }

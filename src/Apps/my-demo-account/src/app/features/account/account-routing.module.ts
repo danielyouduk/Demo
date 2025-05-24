@@ -1,8 +1,9 @@
-import { Routes } from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import {AccountSettingsComponent} from './pages/account-settings/account-settings.component';
 import {AccountHomeComponent} from './pages/account-home/account-home.component';
+import {NgModule} from '@angular/core';
 
-export const accountRoutes: Routes = [
+const accountRoutingModule: Routes = [
   {
     path: '',
     component: AccountHomeComponent,
@@ -14,3 +15,9 @@ export const accountRoutes: Routes = [
     title: 'Account Settings'
   }
 ]
+
+@NgModule({
+  imports: [RouterModule.forChild(accountRoutingModule)],
+  exports: [RouterModule]
+})
+export class AccountRoutingModule { }
